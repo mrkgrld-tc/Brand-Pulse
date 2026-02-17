@@ -1,0 +1,76 @@
+/* ===== MONTSERRAT (Headings) ===== */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('@/assets/fonts/montserrat/Montserrat-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('@/assets/fonts/montserrat/Montserrat-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('@/assets/fonts/montserrat/Montserrat-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('@/assets/fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* ===== INTER (Body / Paragraphs) ===== */
+@font-face {
+  font-family: 'Inter';
+  src: url('@/assets/fonts/inter/Inter-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('@/assets/fonts/inter/Inter-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('@/assets/fonts/inter/Inter-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* ===== APPLY ===== */
+body {
+  font-family: 'Inter', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+p, span, li, td, th, label, input, textarea {
+  font-family: 'Inter', sans-serif !important;
+}
+
+table {
+  font-variant-numeric: tabular-nums;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #07060f !important;
+  overflow-x: hidden;
+}
+.glass-card {
+  background: rgba(110, 114, 154, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  color: white;
+}
