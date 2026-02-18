@@ -8,58 +8,78 @@
             <v-btn size="small" color="primary">Discover</v-btn>
         </div>
     </v-container>
-    
-    <v-container style="height: 100vh">
-        <h1 class="text-center">Key Features</h1>
-        <v-row>
-            <v-col cols="12" md="6">
-                <v-card class="glass-card">
-                    <v-card-text>
-                        <div class="d-flex align-center ga-3">
-                            <v-icon size="36">mdi-message-text-outline</v-icon>
-                            <p>Drowning in customer reviews but no clear insights?</p>
-                        </div>
-                    </v-card-text>
+    <v-container fluid style="height: 100vh" class="d-flex flex-column align-center justify-center">
+        <h3 class="text-center section-title mb-8">Everything You Need to Understand Your Customers</h3>
+        <v-carousel
+            hide-delimiters
+            show-arrows="hover"
+            height="340"
+            style="max-width: 700px; width: 100%;"
+            cycle
+            interval="3500"
+        >
+            <v-carousel-item v-for="(item, i) in features" :key="i">
+                <v-card class="glass-card mx-auto" elevation="0" rounded="xl">
+                <v-card-text class="d-flex flex-column align-center text-center pa-10">
+                    <div class="icon-wrapper mb-5">
+                    <img class="icon" :src="item.icon" :alt="item.alt" />
+                    </div>
+                    <div class="chip-label mb-3">{{ item.tag }}</div>
+                    <h4 class="feature-title mb-3">{{ item.title }}</h4>
+                    <p class="feature-desc">{{ item.desc }}</p>
+                </v-card-text>
                 </v-card>
-            </v-col>
-            <v-col cols="12" md="6">
-                <v-card class="glass-card">
-                    <v-card-text>
-                        <div class="d-flex align-center ga-3">
-                            <v-icon size="36">mdi-head-question-outline</v-icon>
-                            <p>Wondering what customers really think about your brand?</p>
-                        </div>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="12" md="6">
-                <v-card class="glass-card">
-                    <v-card-text>
-                        <div class="d-flex align-center ga-3">
-                            <v-icon size="36">mdi-account-arrow-right-outline</v-icon>
-                            <p>Losing customers to competitors but don't know why?</p>
-                        </div>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="12" md="6">
-                <v-card class="glass-card">
-                    <v-card-text>
-                        <div class="d-flex align-center ga-3">
-                            <v-icon size="36">mdi-clock-alert-outline</v-icon>
-                            <p>Spending hours manually reading feedback?</p>
-                        </div>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>       
+            </v-carousel-item>
+        </v-carousel>
+        <!-- dot indicators -->
+        <div class="d-flex ga-2">
+            <v-icon v-for="(item, i) in features">mdi-circle-small</v-icon>
+        </div>
     </v-container>
     </AnimatedBackground>
 </template>
 
 <script>
+import liveChatIcon from '@/assets/icons/live-chat.gif'
+import confusionIcon from '@/assets/icons/confusion.gif'
+import unhappyIcon from '@/assets/icons/unhappy.gif'
+import hourglassIcon from '@/assets/icons/hourglass.gif'
 import AnimatedBackground from '@/components/AnimatedBackground.vue'
     export default {
+        data(){
+            return{
+                features : [
+                    {
+                        icon: liveChatIcon,
+                        alt: 'Live Chat',
+                        tag: 'Problem #1',
+                        title: 'Information Overload',
+                        desc: 'Drowning in customer reviews with no clear insights? We aggregate and surface only what matters.',
+                    },
+                    {
+                        icon: confusionIcon,
+                        alt: 'Confusion',
+                        tag: 'Problem #2',
+                        title: 'Lack of Clarity',
+                        desc: 'Wondering what customers really think about your brand? Get a crystal-clear picture in seconds.',
+                    },
+                    {
+                        icon: unhappyIcon,
+                        alt: 'Unhappy',
+                        tag: 'Problem #3',
+                        title: 'Customer Churn',
+                        desc: 'Losing customers to competitors but dont know why? Identify friction points before it\'s too late.',
+                    },
+                    {
+                        icon: hourglassIcon,
+                        alt: 'Hourglass',
+                        tag: 'Problem #4',
+                        title: 'Wasted Time',
+                        desc: 'Spending hours manually reading feedback? Automate the grunt work and focus on action.',
+                    },
+                ]
+            }
+        },
         methods : {
             
         },
@@ -79,4 +99,9 @@ import AnimatedBackground from '@/components/AnimatedBackground.vue'
     .nav-text {
         font-size : clamp(0.75rem, 1vw, 1.5rem)
     }
+    .icon {
+        height: 50px;
+        border-radius: 4px;
+    }
+    
 </style>
