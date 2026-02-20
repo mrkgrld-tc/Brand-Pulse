@@ -3,8 +3,10 @@
         <v-main>
             <v-app-bar v-if="!backgroundActive" density="compact">
                 <v-app-bar-title>
-                    <div class="d-flex align-end ga-2">
-                        <h5>Brand Pulse</h5>
+                    <div class="d-flex align-end ga-1">
+                        <h3>Brand</h3>
+                        <h3 class="text-primary">Pulse</h3>
+                        <!-- <p style="font-size:0.6rem">powered by</p> -->
                         <v-chip variant="outlined" size="x-small" class="app__badge">AI-powered</v-chip>
                     </div>
                 </v-app-bar-title>
@@ -21,13 +23,12 @@
                     </v-menu>
                 </template>
             </v-app-bar>
-            <v-navigation-drawer v-if="!backgroundActive">
-                
-            </v-navigation-drawer>
-            <!-- Main Display -->
+            
             <AnimatedBackground v-if="backgroundActive">
                 <router-view></router-view>
             </AnimatedBackground>
+
+            <router-view else></router-view>
         </v-main>
     </v-app>
 </template>
