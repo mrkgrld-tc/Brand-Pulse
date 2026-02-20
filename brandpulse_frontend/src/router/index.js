@@ -9,6 +9,12 @@ const router = createRouter({
       component: () => import('../view/landingpage.vue'),
       // meta: {requiresAuth: true}
     },
+    {
+      path: '/login',
+      name: 'Login Page',
+      component: () => import('../view/login.vue'),
+      // meta: {requiresAuth: true}
+    },
   ],
 })
 
