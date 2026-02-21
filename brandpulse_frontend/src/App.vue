@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-main>
-            <v-app-bar v-if="!backgroundActive" density="compact">
+            <v-app-bar class="glass-card" v-if="!backgroundActive" density="compact">
                 <v-app-bar-title>
                     <div class="d-flex align-end ga-1">
                         <h3>Brand</h3>
@@ -24,11 +24,11 @@
                 </template>
             </v-app-bar>
             
-            <AnimatedBackground v-if="backgroundActive">
+            <!-- <AnimatedBackground> -->
                 <router-view></router-view>
-            </AnimatedBackground>
+            <!-- </AnimatedBackground> -->
 
-            <router-view else></router-view>
+            <!-- <router-view else></router-view> -->
         </v-main>
     </v-app>
 </template>

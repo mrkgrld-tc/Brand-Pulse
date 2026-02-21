@@ -1,57 +1,51 @@
 <template>
-  <div class="chart">
     <v-chart :option="chartOptions" />
-  </div>
 </template>
 
 <script>
 export default {
-  name: 'SwotRadarChart',
-  data() {
-    return {
-      chartOptions: {
-        title: { text: 'SWOT Radar Chart' },
-        tooltip: {},
-        radar: {
-          // Define axes for SWOT factors
-          indicator: [
-            { name: 'Strengths', max: 10 },
-            { name: 'Weaknesses', max: 10 },
-            { name: 'Opportunities', max: 10 },
-            { name: 'Threats', max: 10 }
-          ]
-        },
-        series: [
-          {
-            name: 'SWOT Analysis',
-            type: 'radar',
-            data: [
-              {
-                value: [8, 4, 7, 6], // scores for each category
-                name: 'Company A'
-              }
-            ]
-          }
-        ]
-      }
-    }
-  },
-  methods: {
-    updateSwot(strength, weakness, opportunity, threat) {
-      this.chartOptions.series[0].data[0].value = [
-        strength,
-        weakness,
-        opportunity,
-        threat
-      ]
-    }
-  }
+    data() {
+        return {
+            chartOptions:  {
+                title: {
+                    text: 'Basic Radar Chart'
+                },
+                legend: {
+                    data: ['Allocated Budget', 'Actual Spending']
+                },
+                radar: {
+                    // shape: 'circle',
+                    indicator: [
+                    { name: 'Sales', max: 6500 },
+                    { name: 'Administration', max: 16000 },
+                    { name: 'Information Technology', max: 30000 },
+                    { name: 'Customer Support', max: 38000 },
+                    { name: 'Development', max: 52000 },
+                    { name: 'Marketing', max: 25000 }
+                    ]
+                },
+                series: [
+                    {
+                    name: 'Budget vs spending',
+                    type: 'radar',
+                    data: [
+                        {
+                        value: [4200, 3000, 20000, 35000, 50000, 18000],
+                        name: 'Allocated Budget'
+                        },
+                        {
+                        value: [5000, 14000, 28000, 26000, 42000, 21000],
+                        name: 'Actual Spending'
+                        }
+                    ]
+                    }
+                ]
+            }
+        }
+    },
 }
 </script>
 
 <style>
-.chart {
-  width: 300px;
-  height: 160px;
-}
+
 </style>

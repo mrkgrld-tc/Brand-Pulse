@@ -23,8 +23,8 @@ const vuetify = createVuetify({
         vBtn : {
             
         }, 
-        vCard : {
-            variant : 'tonal'
+        VCard : {
+            class : 'glass-card'
         }
     }
 })

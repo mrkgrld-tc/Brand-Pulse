@@ -2,10 +2,10 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero__content">
-        <div class="hero__badge">AI-Powered Brand Intelligence</div>
+        <div class="badge">AI-Powered Brand Intelligence</div>
         <h1 class="hero__title">
             Stop Guessing.<br />
-            <span class="hero__title--highlight">Start Knowing.</span>
+            <span class="gradient-text">Start Knowing.</span>
         </h1>
         <p class="hero__subtitle">
             BrandPulse analyzes customer sentiment, tracks trends, and compares
@@ -47,8 +47,8 @@
   <!-- Features Section -->
     <section id="features" class="page-section">
         <div class="section-header">
-        <div class="section-badge">Features</div>
-        <h2 class="section-title">Everything You Need to<br /><span class="highlight">Understand Your Customers</span></h2>
+        <div class="badge">Features</div>
+        <h2 class="section-title">Everything You Need to<br /><span class="gradient-text">Understand Your Customers</span></h2>
         <p class="section-subtitle">We turn messy, overwhelming feedback into clarity you can act on.</p>
         </div>
         <carousel :items="features" :peek="50" :gap="16" :interval="4000">
@@ -59,8 +59,8 @@
                 <img class="icon" :src="item.icon" :alt="item.alt" />
                 </div>
                 <div class="chip-label mb-3">{{ item.tag }}</div>
-                <h4 class="feature-title mb-3">{{ item.title }}</h4>
-                <p class="feature-desc">{{ item.desc }}</p>
+                <h4 class="card-title mb-3">{{ item.title }}</h4>
+                <p class="card-desc">{{ item.desc }}</p>
             </v-card-text>
             </v-card>
         </template>
@@ -70,8 +70,8 @@
   <!-- Steps Section -->
     <section class="page-section page-section--alt">
         <div class="section-header">
-        <div class="section-badge">How It Works</div>
-        <h2 class="section-title">Up and Running in<br /><span class="highlight">Three Easy Steps</span></h2>
+        <div class="badge">How It Works</div>
+        <h2 class="section-title">Up and Running in<br /><span class="gradient-text">Three Easy Steps</span></h2>
         <p class="section-subtitle">No complex setup. No data science degree required.</p>
         </div>
         <carousel :items="steps" :peek="50" :gap="16" :interval="4000">
@@ -82,8 +82,8 @@
                 <img class="icon" :src="item.icon" :alt="item.alt" />
                 </div>
                 <div class="chip-label mb-3">{{ item.tag }}</div>
-                <h4 class="feature-title mb-3">{{ item.title }}</h4>
-                <p class="feature-desc">{{ item.desc }}</p>
+                <h4 class="card-title mb-3">{{ item.title }}</h4>
+                <p class="card-desc">{{ item.desc }}</p>
             </v-card-text>
             </v-card>
         </template>
@@ -93,8 +93,8 @@
   <!-- FAQ Section -->
     <section class="page-section">
         <div class="section-header">
-            <div class="section-badge">FAQ</div>
-            <h2 class="section-title">Frequently Asked <span class="highlight">Questions</span></h2>
+            <div class="badge">FAQ</div>
+            <h2 class="section-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
             <p class="section-subtitle">Everything you need to know before getting started.</p>
         </div>
 
@@ -118,11 +118,12 @@
             </div>
         </div>
     </section>
+
     <!-- Pricing Section -->
     <section class="page-section page-section--alt">
         <div class="section-header">
-            <div class="section-badge">Pricing</div>
-            <h2 class="section-title">Simple, Affordable <span class="highlight">Pricing</span></h2>
+            <div class="badge">Pricing</div>
+            <h2 class="section-title">Simple, Affordable <span class="gradient-text">Pricing</span></h2>
             <p class="section-subtitle">Start free, upgrade when you're ready. No hidden fees.</p>
         </div>
 
@@ -146,7 +147,7 @@
 
             <ul class="pricing__features">
                 <li v-for="(feature, j) in plan.features" :key="j" class="pricing__feature">
-                <svg class="pricing__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path d="M5 13l4 4L19 7" />
                 </svg>
                 {{ feature }}
@@ -173,7 +174,7 @@
             <p class="pricing__perks-label">All plans include:</p>
             <div class="pricing__perks-list">
             <span v-for="(perk, i) in perks" :key="i" class="pricing__perk">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M5 13l4 4L19 7" />
                 </svg>
                 {{ perk }}
@@ -181,10 +182,11 @@
             </div>
         </div>
     </section>
+
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="cta-glow" />
-        <div class="section-badge" style="margin: 0 auto 20px;">Get Started Today</div>
+        <div class="badge" style="margin: 0 auto 20px;">Get Started Today</div>
         <h2 class="cta-title">Ready to Know Your Customers?</h2>
         <p class="cta-subtitle">Join thousands of brands making smarter decisions with BrandPulse.</p>
         <div class="cta-actions">
@@ -285,10 +287,6 @@ export default {
                     q: 'What about data privacy?',
                     a: 'Your data is encrypted and never shared. We comply with the Philippine Data Privacy Act.',
                 },
-                // {
-                //     q: 'Can I export the reports?',
-                //     a: 'Yes, export as PDF or CSV for presentations and further analysis.',
-                // },
             ],
             plans: [
                 {
@@ -336,7 +334,6 @@ export default {
                 perks: [
                 'Tagalog & English support',
                 'Visual dashboard',
-                // 'Export reports',
                 'No credit card required for trial',
             ],
         }
@@ -350,6 +347,58 @@ export default {
 </script>
 
 <style>
+/* ── Shared Utilities ─────────────────────────────── */
+
+/* Replaces: .hero__badge, .section-badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgba(var(--v-theme-primary), 0.1);
+  color: rgb(var(--v-theme-primary));
+  border: 1px solid rgba(var(--v-theme-primary), 0.2);
+}
+
+/* Replaces: .hero__title--highlight, .highlight */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    rgb(var(--v-theme-primary)),
+    color-mix(in srgb, rgb(var(--v-theme-primary)) 55%, white)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Replaces: .pricing__check, .pricing__perk svg */
+.check-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: rgb(var(--v-theme-primary));
+}
+
+/* Replaces: .feature-title, .feature-desc (carousel cards) */
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.card-desc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  opacity: 0.65;
+  margin: 0;
+}
+
 /* ── Hero ─────────────────────────────────────────── */
 .hero {
   display: flex;
@@ -369,39 +418,12 @@ export default {
   gap: 20px;
 }
 
-.hero__badge {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  background: rgba(var(--v-theme-primary), 0.12);
-  color: rgb(var(--v-theme-primary));
-  border: 1px solid rgba(var(--v-theme-primary), 0.25);
-}
-
 .hero__title {
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
   margin: 0;
-}
-
-.hero__title--highlight,
-.highlight {
-  background: linear-gradient(
-    135deg,
-    rgb(var(--v-theme-primary)),
-    color-mix(in srgb, rgb(var(--v-theme-primary)) 55%, white)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .hero__subtitle {
@@ -508,20 +530,6 @@ export default {
   max-width: 600px;
 }
 
-.section-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 14px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  background: rgba(var(--v-theme-primary), 0.1);
-  color: rgb(var(--v-theme-primary));
-  border: 1px solid rgba(var(--v-theme-primary), 0.2);
-}
-
 .section-title {
   font-size: clamp(1.7rem, 3.5vw, 2.6rem);
   font-weight: 800;
@@ -580,51 +588,6 @@ export default {
   gap: 12px;
   justify-content: center;
   margin-top: 8px;
-}
-
-/* ── Responsive ───────────────────────────────────── */
-@media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    padding: 100px 6vw 60px;
-    text-align: center;
-  }
-
-  .hero__content {
-    align-items: center;
-  }
-
-  .hero__subtitle {
-    text-align: center;
-  }
-
-  .hero__actions,
-  .hero__stats {
-    justify-content: center;
-  }
-
-  .hero__image-wrapper {
-    max-width: 100%;
-  }
-
-  .hero__image {
-    max-width: 320px;
-  }
-
-  .page-section {
-    padding: 80px 5vw;
-    gap: 32px;
-  }
-}
-
-@media (max-width: 420px) {
-  .hero__stats {
-    gap: 16px;
-  }
-
-  .hero__stat-value {
-    font-size: 1.2rem;
-  }
 }
 
 /* ── FAQ ──────────────────────────────────────────── */
@@ -690,8 +653,8 @@ export default {
 }
 
 .faq__answer p {
-  overflow: hidden;       /* this is what clamps it to 0 when collapsed */
-  min-height: 0;          /* ← required for 0fr to actually collapse */
+  overflow: hidden;
+  min-height: 0;
   margin: 0;
   padding: 0 24px 20px;
   font-size: 0.92rem;
@@ -814,18 +777,10 @@ export default {
   opacity: 0.8;
 }
 
-.pricing__check {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  color: rgb(var(--v-theme-primary));
-}
-
 .pricing__btn {
   margin-top: auto;
 }
 
-/* Perks */
 .pricing__perks {
   display: flex;
   flex-direction: column;
@@ -855,14 +810,40 @@ export default {
   opacity: 0.7;
 }
 
-.pricing__perk svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  color: rgb(var(--v-theme-primary));
-}
-
+/* ── Responsive ───────────────────────────────────── */
 @media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    padding: 100px 6vw 60px;
+    text-align: center;
+  }
+
+  .hero__content {
+    align-items: center;
+  }
+
+  .hero__subtitle {
+    text-align: center;
+  }
+
+  .hero__actions,
+  .hero__stats {
+    justify-content: center;
+  }
+
+  .hero__image-wrapper {
+    max-width: 100%;
+  }
+
+  .hero__image {
+    max-width: 320px;
+  }
+
+  .page-section {
+    padding: 80px 5vw;
+    gap: 32px;
+  }
+
   .pricing__card {
     transform: none !important;
     max-width: 100%;
@@ -872,4 +853,14 @@ export default {
     order: -1;
   }
 }
-</style>
+
+@media (max-width: 420px) {
+  .hero__stats {
+    gap: 16px;
+  }
+
+  .hero__stat-value {
+    font-size: 1.2rem;
+  }
+}
+</style>  

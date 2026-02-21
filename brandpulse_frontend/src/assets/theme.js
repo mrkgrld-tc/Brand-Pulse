@@ -3,12 +3,12 @@ const customDarkTheme = {
     dark: true,
     colors: {
       // Main backgrounds
-      background: '#313338',        // Discord main chat background
-      surface: '#2B2D31',          // Discord secondary background (sidebars)
-      'surface-bright': '#404249',  // Discord hover states
-      'surface-light': '#383A40',   // Discord elevated surfaces
-      'surface-variant': '#1E1F22', // Discord darkest background
-      'on-surface-variant': '#B5BAC1', // Discord muted text
+      background: '#1a1520',        // Deep dark purple base
+      surface: '#151219',           // Deeper purple for sidebars
+      'surface-bright': '#2a2333',  // Purple hover states
+      'surface-light': '#221c2b',   // Elevated purple surfaces
+      'surface-variant': '#0e0b12', // Darkest purple background
+      'on-surface-variant': '#a89bc2', // Muted purple-tinted text
       
       // Primary (Discord Blurple)
       primary: '#5865F2',
