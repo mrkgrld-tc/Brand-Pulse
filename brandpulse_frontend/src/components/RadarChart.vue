@@ -1,41 +1,56 @@
 <template>
-    <v-chart :option="chartOptions" />
+    <v-chart :option="chartOptions" autoresize/>
 </template>
 
 <script>
 export default {
     data() {
         return {
+            lineStyle : {
+                width: 1,
+                opacity: 0.5
+            },
             chartOptions:  {
                 title: {
-                    text: 'Basic Radar Chart'
+                    text: 'Business Performance'
                 },
                 legend: {
-                    data: ['Allocated Budget', 'Actual Spending']
+                    data: ['Business Performance']
                 },
+                color : [
+
+                ],
                 radar: {
                     // shape: 'circle',
                     indicator: [
-                    { name: 'Sales', max: 6500 },
-                    { name: 'Administration', max: 16000 },
-                    { name: 'Information Technology', max: 30000 },
-                    { name: 'Customer Support', max: 38000 },
-                    { name: 'Development', max: 52000 },
-                    { name: 'Marketing', max: 25000 }
-                    ]
+                        { name: 'Customer Service', max: 100 },
+                        { name: 'Product Quality', max: 100 },
+                        { name: 'Value for Money', max: 100 },
+                        { name: 'Speed/Efficiency', max: 100 },
+                        { name: 'Cleanliness', max: 100 },
+                        { name: 'Atmosphere', max: 100 }
+                    ],
+                     axisLine: {
+                        lineStyle: {
+                            color: '#7289DA'
+                        }   
+                    }
                 },
                 series: [
                     {
-                    name: 'Budget vs spending',
+                    name: 'Business Performance',
                     type: 'radar',
+                    itemStyle: {
+                        color: '#F14A00'
+                    },
+                    areaStyle: {
+                        opacity: 0.4
+                    },
+                    lineStyle: this.lineStyle,
                     data: [
                         {
-                        value: [4200, 3000, 20000, 35000, 50000, 18000],
-                        name: 'Allocated Budget'
-                        },
-                        {
-                        value: [5000, 14000, 28000, 26000, 42000, 21000],
-                        name: 'Actual Spending'
+                        value: [25, 34, 67, 86, 96, 50],
+                        name: 'Business Performance'
                         }
                     ]
                     }

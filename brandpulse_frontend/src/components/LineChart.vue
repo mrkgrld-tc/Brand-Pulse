@@ -1,108 +1,234 @@
 <template>
-    <v-chart :option="chartOption" autoresize/>
+    <v-chart class="line-chart" :option="chartOption" autoresize/>
 </template>
 
 <script>
-    export default {
-        data(){
-            return{
+export default {
+    props: {
+        title: {
+            type: String,
+            default: 'Sentiment Over Time'
+        },
+        dates: {
+            type: Array,
+            default: () => ['Feb 1', 'Feb 5', 'Feb 10', 'Feb 15', 'Feb 20', 'Feb 25']
+        },
+        positiveData: {
+            type: Array,
+            default: () => [45, 52, 48, 60, 55, 68]
+        },
+        neutralData: {
+            type: Array,
+            default: () => [18, 20, 22, 19, 21, 22]
+        },
+        negativeData: {
+            type: Array,
+            default: () => [8, 12, 9, 11, 8, 10]
+        },
+        
+        showDataZoom: {
+            type: Boolean,
+            default: true
+        }
+    },
+    computed: {
+        colors() {
+            return {
+                positive: '#4CAF50',
+                neutral: '#FF9800',
+                negative: '#F44336'
             }
         },
-        computed: {
-            colors() {
-                return ['#5470C6', '#EE6666', '#32CD32']
-            },
-            chartOption() {
+        chartOption() {
             return {
-                color: this.colors,
-                title :{
-                    text : 'Sentiment Trend'
-                },
-                tooltip: {},
-                legend: {},
-                grid: { top: 70, bottom: 50 },
-                xAxis: [
-                    {
-                        type: 'category',
-                        axisTick: { alignWithLabel: true },
-                        axisLine: { onZero: false, lineStyle: { color: this.colors[0] } },
-                        axisPointer: {
-                        label: {
-                            formatter: params =>
-                            'Precipitation ' +
-                            params.value +
-                            (params.seriesData.length ? '：' + params.seriesData[0].data : '')
-                        }
-                        },
-                        data: ['2016-1','2016-2','2016-3','2016-4','2016-5','2016-6','2016-7','2016-8','2016-9','2016-10','2016-11','2016-12']
-                    },
-                    {
-                        type: 'category',
-                        axisTick: { alignWithLabel: true },
-                        axisLine: { onZero: false, lineStyle: { color: this.colors[1] } },
-                        axisPointer: {
-                        label: {
-                            formatter: params =>
-                            'Precipitation ' +
-                            params.value +
-                            (params.seriesData.length ? '：' + params.seriesData[1].data : '')
-                        }
-                        },
-                        data: ['2015-1','2015-2','2015-3','2015-4','2015-5','2015-6','2015-7','2015-8','2015-9','2015-10','2015-11','2015-12']
-                    },
-                    {
-                        type: 'category',
-                        axisTick: { alignWithLabel: true },
-                        axisLine: { onZero: false, lineStyle: { color: this.colors[2] } },
-                        axisPointer: {
-                        label: {
-                            formatter: params =>
-                            'Precipitation ' +
-                            params.value +
-                            (params.seriesData.length ? '：' + params.seriesData[2].data : '')
-                        }
-                        },
-                        data: ['2015-1','2015-2','2015-3','2015-4','2015-5','2015-6','2015-7','2015-8','2015-9','2015-10','2015-11','2015-12']
+                title: {
+                    text: this.title,
+                    left: 'center',
+                    top: 10,
+                    textStyle: {
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        color: '#333'
                     }
-                ],
-                yAxis: [{ type: 'value' }],
-                dataZoom: [
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data: ['Positive', 'Neutral', 'Negative'],
+                    bottom: 10,
+                    textStyle: {
+                        fontSize: 12
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    top: 70,
+                    bottom: 60,
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: this.dates,
+                    axisLine: {
+                        lineStyle: {
+                            color: '#999'
+                        }
+                    },
+                    axisLabel: {
+                        fontSize: 11,
+                        color: '#666'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'No of Reviews',
+                    nameTextStyle: {
+                        fontSize: 12,
+                        color: '#666'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#999'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#E5E5E5',
+                            type: 'dashed'
+                        }
+                    }
+                },
+                dataZoom: this.showDataZoom ? [
                     {
                         type: 'inside',
-                        minValueSpan: 1000-3000
+                        start: 0,
+                        end: 100
                     },
-                ],
+                    {
+                        type: 'slider',
+                        start: 0,
+                        end: 100,
+                        height: 20,
+                        bottom: 35
+                    }
+                ] : [],
                 series: [
                     {
-                        name: 'Bad',
+                        name: 'Positive',
                         type: 'line',
-                        xAxisIndex: 1,
                         smooth: true,
-                        emphasis: { focus: 'series' },
-                        data: [2.6,5.9,9.0,26.4,28.7,70.7,175.6,182.2,48.7,18.8,6.0,2.3]
+                        symbolSize: 8,
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        lineStyle: {
+                            width: 3,
+                            color: this.colors.positive
+                        },
+                        itemStyle: {
+                            color: this.colors.positive,
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [
+                                    { offset: 0, color: 'rgba(76, 175, 80, 0.3)' },
+                                    { offset: 1, color: 'rgba(76, 175, 80, 0.05)' }
+                                ]
+                            }
+                        },
+                        data: this.positiveData
                     },
                     {
                         name: 'Neutral',
                         type: 'line',
                         smooth: true,
-                        emphasis: { focus: 'series' },
-                        data: [3.9,5.9,11.1,18.7,48.3,69.2,231.6,46.6,55.4,18.4,10.3,0.7]
+                        symbolSize: 8,
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        lineStyle: {
+                            width: 3,
+                            color: this.colors.neutral
+                        },
+                        itemStyle: {
+                            color: this.colors.neutral,
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [
+                                    { offset: 0, color: 'rgba(255, 152, 0, 0.3)' },
+                                    { offset: 1, color: 'rgba(255, 152, 0, 0.05)' }
+                                ]
+                            }
+                        },
+                        data: this.neutralData
                     },
                     {
-                        name: 'Good',
+                        name: 'Negative',
                         type: 'line',
                         smooth: true,
-                        emphasis: { focus: 'series' },
-                        data: [231.6,46.6,55.4,18.4,10.3,0.7,3.9,5.9,11.1,18.7,48.3,69.2,]
+                        symbolSize: 8,
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        lineStyle: {
+                            width: 3,
+                            color: this.colors.negative
+                        },
+                        itemStyle: {
+                            color: this.colors.negative,
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [
+                                    { offset: 0, color: 'rgba(244, 67, 54, 0.3)' },
+                                    { offset: 1, color: 'rgba(244, 67, 54, 0.05)' }
+                                ]
+                            }
+                        },
+                        data: this.negativeData
                     }
                 ]
             }
-            }
         }
-
     }
+}
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+.line-chart {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+}
 </style>

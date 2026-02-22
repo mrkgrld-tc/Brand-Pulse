@@ -68,11 +68,38 @@ html, body {
 }
 .glass-card {
   background: rgba(110, 114, 154, 0.1) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.glass-card:hover {
+    transform: translateY(-2px);
+    background: rgba(20, 20, 35, 0.85);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease;
+}
+
+.summary-card {
+    background: rgba(30, 30, 50, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.summary-cards-stat {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 0 0 20px currentColor; /* Subtle glow */
+}
+.chart-card {
+    background: rgba(20, 20, 35, 0.75);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .icon {
   height: 50px;

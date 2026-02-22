@@ -20,11 +20,13 @@ const vuetify = createVuetify({
         }
     },
     defaults : {
-        vBtn : {
-            
+        VBtn : {
+            variant : 'tonal',
+            class : 'rounded-xl'
         }, 
         VCard : {
-            class : 'glass-card'
+            class : 'rounded-lg glass-card',
+            variant : ''
         }
     }
 })

@@ -13,20 +13,18 @@
                 <template v-slot:append>
                     <v-icon class="mr-2" id="menu">mdi-menu</v-icon>
                     <v-menu activator="#menu" width="300px" class="pa-5">
-                        <v-card>
-                            <v-card-text>
-                                <v-list>
-                                    <v-list-item-title><h4>Angles Burger</h4></v-list-item-title>
-                                </v-list>
-                            </v-card-text>
-                        </v-card>
+                        <v-list  style="padding : 16px!important; border-radius: 4px">
+                            <v-list-item-title>Company Name</v-list-item-title>
+                            <v-list-item-subtitle>Company Name</v-list-item-subtitle>
+                            <v-divider class="border-opacity-25 my-2"></v-divider>
+                        </v-list>
                     </v-menu>
                 </template>
             </v-app-bar>
             
-            <!-- <AnimatedBackground> -->
+            <AnimatedBackground>
                 <router-view></router-view>
-            <!-- </AnimatedBackground> -->
+            </AnimatedBackground>
 
             <!-- <router-view else></router-view> -->
         </v-main>
