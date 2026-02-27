@@ -11,11 +11,11 @@ export default {
         },
         keywords: {
             type: Array,
-            default: () => ['food', 'service', 'price', 'quality', 'ambiance', 'staff']
+            default: () => ['food', 'service', 'price', 'quality', 'ambiance', 'staff', 'food', 'service', 'price', 'quality', 'ambiance', 'staff',]
         },
         counts: {
             type: Array,
-            default: () => [42, 35, 28, 22, 19, 15]
+            default: () => [42, 35, 28, 22, 19, 15, 42, 35, 28, 22, 19, 15]
         },
         showValues: {
             type: Boolean,

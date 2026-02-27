@@ -1,136 +1,190 @@
 <template>
-  <div class="auth-page">
-    <div class="auth-glow" />
+    <div class="auth-page">
+        <div class="auth-glow" />
 
-    <v-card width="420" class="auth-card glass-card" elevation="0" rounded="xl">
-      <!-- Header -->
-      <div class="auth-header">
-        <img src="../assets/icons/corporate-culture.gif" alt="BrandPulse" class="auth-logo" />
-        <div class="auth-badge">BrandPulse</div>
-        <h2 class="auth-title">{{ action === 'login' ? 'Welcome back' : 'Create account' }}</h2>
-        <p class="auth-subtitle">
-          {{ action === 'login'
-            ? 'Sign in to access your dashboard'
-            : 'Start your 14-day free trial today' }}
-        </p>
-      </div>
+        <v-card width="420" class="auth-card glass-card" elevation="0" rounded="xl">
+        <!-- Header -->
+        <div class="auth-header">
+            <img src="../assets/icons/corporate-culture.gif" alt="BrandPulse" class="auth-logo" />
+            <div class="auth-badge">BrandPulse</div>
+            <h2 class="auth-title">{{ action === 'login' ? 'Welcome back' : 'Create account' }}</h2>
+            <p class="auth-subtitle">
+            {{ action === 'login'
+                ? 'Sign in to access your dashboard'
+                : 'Create Your Account Today' }}
+            </p>
+        </div>
 
-      <!-- Form -->
-      <div class="auth-form">
-        <!-- Sign Up only -->
-        <v-text-field
-          v-if="action === 'signup'"
-          v-model="name"
-          label="Full Name"
-          variant="outlined"
-          rounded="lg"
-          density="compact"
-          hide-details
-        >
-          <template #append-inner><v-icon size="18" opacity="0.5">mdi-account-outline</v-icon></template>
-        </v-text-field>
-
-        <v-text-field
-          v-model="email"
-          label="Email address"
-          variant="outlined"
-          rounded="lg"
-          density="compact"
-          hide-details
-        >
-          <template #append-inner><v-icon size="18" opacity="0.5">mdi-email-outline</v-icon></template>
-        </v-text-field>
-
-        <v-text-field
-          v-model="password"
-          label="Password"
-          variant="outlined"
-          rounded="lg"
-          density="compact"
-          hide-details
-          :type="showPassword ? 'text' : 'password'"
-        >
-          <template #append-inner>
-            <v-icon
-              size="18"
-              opacity="0.5"
-              style="cursor:pointer"
-              @click="showPassword = !showPassword"
+        <!-- Form -->
+        <div class="auth-form">
+            <!-- Sign Up only -->
+            <v-text-field
+                v-if="action === 'signup'"
+                v-model="name"
+                label="Full Name"
+                variant="outlined"
+                rounded="lg"
+                density="compact"
+                hide-details
             >
-              {{ showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline' }}
-            </v-icon>
-          </template>
-        </v-text-field>
+                <template #append-inner><v-icon size="18" opacity="0.5">mdi-account-outline</v-icon></template>
+            </v-text-field>
 
-        <div v-if="action === 'login'" class="auth-forgot">
-          <a href="#" class="auth-link">Forgot password?</a>
+            <v-text-field
+                v-model="email"
+                label="Email address"
+                variant="outlined"
+                rounded="lg"
+                density="compact"
+                hide-details
+            >
+                <template #append-inner><v-icon size="18" opacity="0.5">mdi-email-outline</v-icon></template>
+            </v-text-field>
+
+            <v-text-field
+                v-model="password"
+                label="Password"
+                variant="outlined"
+                rounded="lg"
+                density="compact"
+                hide-details
+                :type="showPassword ? 'text' : 'password'"
+            >
+                <template #append-inner>
+                    <v-icon
+                    size="18"
+                    opacity="0.5"
+                    style="cursor:pointer"
+                    @click="showPassword = !showPassword"
+                    >
+                    {{ showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline' }}
+                    </v-icon>
+                </template>
+            </v-text-field>
+
+            <v-btn
+                color="primary"
+                rounded="lg"
+                block
+                class="auth-submit"
+                size="large"
+                @click="handleAuthSubmit()"
+            >
+            {{ action === 'login' ? 'Sign In' : 'Create Account' }}
+            <v-icon end>mdi-arrow-right</v-icon>
+            </v-btn>
         </div>
 
-        <v-btn
-          :to="action === 'login' ? '/' : undefined"
-          color="primary"
-          size="large"
-          rounded="lg"
-          block
-          class="auth-submit"
-        >
-          {{ action === 'login' ? 'Sign In' : 'Create Account' }}
-          <v-icon end>mdi-arrow-right</v-icon>
-        </v-btn>
-
-        <!-- <div class="auth-divider">
-          <span>or</span>
+        <!-- Footer -->
+        <div class="auth-footer">
+            <span class="auth-footer-text">
+            {{ action === 'login' ? "Don't have an account?" : 'Already have an account?' }}
+            </span>
+            <button class="auth-link" @click="toggle">
+            {{ action === 'login' ? 'Sign up free' : 'Sign in' }}
+            </button>
         </div>
-
-        <v-btn
-          variant="outlined"
-          size="large"
-          rounded="lg"
-          block
-          class="auth-google"
-        >
-          <template #prepend>
-            <svg width="18" height="18" viewBox="0 0 48 48">
-              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-            </svg>
-          </template>
-          Continue with Google
-        </v-btn> -->
-      </div>
-
-      <!-- Footer -->
-      <div class="auth-footer">
-        <span class="auth-footer-text">
-          {{ action === 'login' ? "Don't have an account?" : 'Already have an account?' }}
-        </span>
-        <button class="auth-link" @click="toggle">
-          {{ action === 'login' ? 'Sign up free' : 'Sign in' }}
-        </button>
-      </div>
-    </v-card>
-  </div>
+        </v-card>
+    </div>
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/authStore';
+import { useNotifStore } from '@/stores/notifStore';
+import { mapActions, mapState } from 'pinia';
 export default {
-  data() {
-    return {
-      action: 'login',
-      showPassword: false,
-      name: '',
-      email: '',
-      password: '',
-    }
-  },
-  methods: {
-    toggle() {
-      this.action = this.action === 'login' ? 'signup' : 'login'
-      this.showPassword = false
+    data() {
+        return {
+        action: 'login',
+        showPassword: false,
+        name: '',
+        email: '',
+        password: '',
+        }
     },
-  },
+    methods: {
+        ...mapActions(useAuthStore, ['logIn', 'signUp']),
+        ...mapActions(useNotifStore, ['showNotif']),
+        toggle() {
+            this.action = this.action === 'login' ? 'signup' : 'login'
+            this.showPassword = false
+        },
+        handleAuthSubmit(){
+            if(this.password.length == 0 || this.email.length == 0){
+                this.showNotif({
+                    active : true,
+                    title : 'Form Empty',
+                    subtitle : 'Please fill up all fields',
+                    icon : 'mdi-alert-circle-outline',
+                })
+            }else{
+                if(this.action =='login'){
+                    const data = {
+                        email : this.email,
+                        password : this.password
+                    }
+                    this.logIn(data);
+                }else{
+                    const data = {
+                        username : this.name,
+                        email : this.email,
+                        password : this.password
+                    }
+                    if(this.validateInput()){
+                        this.signUp(data);
+                        this.action = 'login'
+                        this.email = '';
+                        this.password = '';
+                        this.name = '';
+                    }
+                }
+            }
+        },
+        validateInput(){
+            if(!this.validateUserName(this.name)){
+                this.showNotif({
+                    active : true,
+                    title : 'Invalid User Name',
+                    subtitle : 'Username must not contain numerical character',
+                    icon : 'mdi-alert-circle-outline',
+                })
+                return false;
+            }
+            if(!this.validatePassword(this.password)){
+                this.showNotif({
+                    active : true,
+                    title : 'Invalid Password',
+                    subtitle : 'Password must be atleast 8 character',
+                    icon : 'mdi-alert-circle-outline',
+                })
+                return false;
+            }
+            if(!this.validateEmail(this.email)){
+                this.showNotif({
+                    active : true,
+                    title : 'Invalid Email',
+                    subtitle : 'Insert a valid Email Address',
+                    icon : 'mdi-alert-circle-outline',
+                })
+                return false;
+            }
+            return true;
+        },
+        validateUserName(username){
+            const regex = /^[a-zA-Z0-9_]{3,16}$/; 
+            return regex.test(username);
+        },
+        validatePassword(password){
+            // const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; 
+            // return regex.test(password);
+            return password.length > 7
+        },
+        validateEmail(email){
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+            return regex.test(email);
+        },
+        
+    },
 }
 </script>
 

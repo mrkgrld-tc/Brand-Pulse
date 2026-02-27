@@ -94,7 +94,7 @@
                         data: [
                             {
                                 value: this.value,
-                                name: 'Customer Satisfaction'
+                                name: this.title
                             }
                         ]
                         }

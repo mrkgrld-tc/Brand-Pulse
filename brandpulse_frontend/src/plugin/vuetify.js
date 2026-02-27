@@ -21,11 +21,18 @@ const vuetify = createVuetify({
     },
     defaults : {
         VBtn : {
-            variant : 'tonal',
-            class : 'rounded-xl'
+            variant: 'tonal',
+            class: 'rounded-lg',
+            size: 'small',  // ✓ pick one sensible default
+            style: [{ fontSize: 'clamp(0.6rem, 1.5vw, 0.75rem)' }]
+        },
+        VListItem : {
+            style: [
+                { fontSize: 'clamp(0.7rem, 1.5vw, 0.875rem)' },
+            ]
         }, 
         VCard : {
-            class : 'rounded-lg glass-card',
+            class : ['rounded-lg', 'glass-card'],
             variant : ''
         }
     }

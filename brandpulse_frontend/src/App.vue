@@ -13,30 +13,64 @@
                 <template v-slot:append>
                     <v-icon class="mr-2" id="menu">mdi-menu</v-icon>
                     <v-menu activator="#menu" width="300px" class="pa-5">
-                        <v-list  style="padding : 16px!important; border-radius: 4px">
-                            <v-list-item-title>Company Name</v-list-item-title>
-                            <v-list-item-subtitle>Company Name</v-list-item-subtitle>
+                        <v-list  style="border-radius: 8px">
+                            <v-list-item-title class="mx-3">Company Name</v-list-item-title>
+                            <v-list-item-subtitle class="mx-3">Details</v-list-item-subtitle>
                             <v-divider class="border-opacity-25 my-2"></v-divider>
+                            <v-list-item :append-icon="route.icon" v-for="(route, i) in nav" :keys="i" :to="route.path">{{route.title}}</v-list-item>
+                            <v-list-item>
+                                <v-btn
+                                    text="Logout"
+                                    block
+                                    color="primary"
+                                    variant="outlined"
+                                    to="/landingpage"
+                                ></v-btn>
+                            </v-list-item>
                         </v-list>
                     </v-menu>
                 </template>
             </v-app-bar>
-            
-            <AnimatedBackground>
+            <template v-if="backgroundActive">
+                <AnimatedBackground>
+                    <router-view></router-view>
+                </AnimatedBackground>
+            </template>
+            <template  v-else>
                 <router-view></router-view>
-            </AnimatedBackground>
-
-            <!-- <router-view else></router-view> -->
+            </template>
+            <!-- <router-view></router-view> -->
+            <Notification 
+                v-model="notif.active"
+                :title = "notif.title"
+                :icon = "notif.icon"
+                :subtitle="notif.subtitle"
+            />
         </v-main>
     </v-app>
 </template>
 <script>
-    import AnimatedBackground from '@/components/AnimatedBackground.vue'
+import AnimatedBackground from '@/components/AnimatedBackground.vue'
+import Notification from './components/Notification.vue';
+import { mapState } from 'pinia';
+import { useNotifStore } from './stores/notifStore';
     export default {
         components : {
-            AnimatedBackground
+            AnimatedBackground,
+            Notification
+        },
+        data(){
+            return{
+                nav: [
+                    {title : 'Dashboard', path : '/', icon : 'mdi-view-dashboard'},
+                    {title : 'Profile', path : '/profile', icon : 'mdi-account-outline'},
+                    {title : 'Analyze', path : '/analyze', icon : 'mdi-file-chart-outline'},
+                    {title : 'Competitor', path : '/competitor', icon : 'mdi-account-group-outline'},
+                ]
+            }
         },
         computed : {
+            ...mapState(useNotifStore, ['notif']),
             backgroundActive(){
                 if(this.$route.path === '/login'){
                     return true;

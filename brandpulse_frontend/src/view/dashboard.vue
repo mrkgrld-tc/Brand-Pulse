@@ -1,11 +1,15 @@
 <template>
     <v-container>
+        <v-system-bar v-if="demoPrompt" class="bg-red d-flex justify-center opacity-50">
+            <p>This is  just demo data</p>
+            <v-icon @click="demoPrompt = falsez" class="position-absolute right-0 mr-2">mdi-close</v-icon>
+        </v-system-bar>
         <v-row>
             <div class="w-100 d-flex align-center mb-2 justify-space-between">
                 <h3>DashBoard</h3>
                 <div class="d-flex ga-1">
-                    <v-btn color="primary" size="small">Analyze</v-btn>
-                    <v-btn color="primary" size="small">Compare</v-btn>
+                    <v-btn to="/analyze">Analyze</v-btn>
+                    <v-btn to="/competitors">Compare</v-btn>
                 </div>
             </div>
         </v-row>
@@ -86,7 +90,7 @@
     export default {
         data(){
             return{
-
+                demoPrompt : true,
             }
         },
         components:{
