@@ -34,6 +34,13 @@ const vuetify = createVuetify({
         VCard : {
             class : ['rounded-lg', 'glass-card'],
             variant : ''
+        },
+        VTextField : {
+            variant : 'outlined',
+            density : 'compact'
+        },
+        VCardTitle : {
+            style: [{ fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)' }]
         }
     }
 })
