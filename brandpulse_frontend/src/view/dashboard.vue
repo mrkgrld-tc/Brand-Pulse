@@ -9,7 +9,7 @@
                 <h3>DashBoard</h3>
                 <div class="d-flex ga-1">
                     <v-btn to="/analyze">Analyze</v-btn>
-                    <v-btn to="/competitors">Compare</v-btn>
+                    <v-btn to="/compare">Compare</v-btn>
                 </div>
             </div>
         </v-row>

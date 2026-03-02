@@ -65,7 +65,7 @@ import { useNotifStore } from './stores/notifStore';
                     {title : 'Dashboard', path : '/', icon : 'mdi-view-dashboard'},
                     {title : 'Profile', path : '/profile', icon : 'mdi-account-outline'},
                     {title : 'Analyze', path : '/analyze', icon : 'mdi-file-chart-outline'},
-                    {title : 'Competitor', path : '/competitor', icon : 'mdi-account-group-outline'},
+                    {title : 'Compare', path : '/compare', icon : 'mdi-file-compare'},
                 ]
             }
         },

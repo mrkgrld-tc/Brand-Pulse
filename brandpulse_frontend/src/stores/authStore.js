@@ -13,6 +13,9 @@ export const useAuthStore = defineStore('authStore' , {
     },
     actions : {
         logIn : (data) => {
+            const res = api.post('/authUser',{
+                data
+            })
             const notifStore = useNotifStore();
             notifStore.showNotif(
                 {

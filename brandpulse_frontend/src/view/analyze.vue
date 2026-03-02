@@ -113,7 +113,7 @@
                 <template v-if="step == 3">
                     <v-card-subtitle class="d-flex align-center justify-space-between">
                         <p>Step 3: Display Analysis Result</p>
-                        <v-btn>Compare</v-btn>
+                        <v-btn to="/compare">Compare</v-btn>
                     </v-card-subtitle>
                     <v-divider class="border-opacity-25 my-1 mx-4"></v-divider>
                     <v-card-subtitle><p>Overview</p></v-card-subtitle>

@@ -14,7 +14,7 @@ const routes = require('./routes/api');
 app.use('/api', routes);
 
 app.listen(PORT, SERVER, () => {
-    console.log(`BrandPulse API running on port ${PORT}`);
+    console.log(`BrandPulse API running on server ${SERVER} port ${PORT}`);
 });
 
 module.exports = app;

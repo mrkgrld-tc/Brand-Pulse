@@ -24,7 +24,7 @@ const vuetify = createVuetify({
             variant: 'tonal',
             class: 'rounded-lg',
             size: 'small',  // ✓ pick one sensible default
-            style: [{ fontSize: 'clamp(0.6rem, 1.5vw, 0.75rem)' }]
+            style: [{ fontSize: 'clamp(0.75rem, 1.5vw, 0.85rem)' }]
         },
         VListItem : {
             style: [
@@ -40,7 +40,7 @@ const vuetify = createVuetify({
             density : 'compact'
         },
         VCardTitle : {
-            style: [{ fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)' }]
+            style: [{ fontSize: 'clamp(0.9rem, 1.5vw, 1rem)!important' }]
         }
     }
 })
