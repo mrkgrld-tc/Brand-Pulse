@@ -97,104 +97,64 @@
                                 ></v-switch>
                             </div>
                         </div>
-                        <v-expand-transition v-if="public">
-                            <div>
-                                <v-divider class="my-4"></v-divider>
+                        <div>
+                            <v-divider class="my-4"></v-divider>
+                            <h4 class="mb-3 d-flex align-center ga-2">
+                                <v-icon color="green">mdi-check-circle-outline</v-icon>
+                                <p>What Gets Shared</p>
+                            </h4>
+                            <v-list density="compact" class="rounded">
+                                <v-list-item>
+                                    <p>Your overall sentiment scores (positive, neutral, negative %)</p>
+                                </v-list-item>
+                                <v-list-item>
+                                    <p>Your industry category and location (city only)</p>
+                                </v-list-item>
+                                <v-list-item>
+                                    <p>Your business performance metrics (radar chart scores)</p>
+                                </v-list-item>
+                                <v-list-item>
+                                    <p>Anonymous business name (e.g., "Restaurant A" instead of "Juan's Restaurant")</p>
+                                </v-list-item>
+                            </v-list>
 
-                                <h4 class="mb-3">What Gets Shared</h4>
-                                <v-list density="compact" class="rounded" bg-color="rgba(255,255,255,0.05)">
-                                    <v-list-item>
-                                        <template v-slot:prepend>
-                                            <v-icon color="success" size="small">mdi-check</v-icon>
-                                        </template>
-                                        <v-list-item-title class="text-caption">
-                                            Your overall sentiment scores (positive, neutral, negative %)
-                                        </v-list-item-title>
-                                    </v-list-item>
+                            <v-divider class="my-4"></v-divider>
+                            <h4 class="mb-3 d-flex align-center ga-2">
+                                <v-icon color="red">mdi-shield-lock-outline</v-icon>
+                                <p>What Stays Private</p>
+                            </h4>
+                            <v-list density="compact" class="rounded">
+                                <v-list-item>
+                                    <p>Individual customer reviews and feedback text</p>
+                                </v-list-item>
+                                <v-list-item>
+                                    <p>Your contact information and account details</p>
+                                </v-list-item>
+                            </v-list>
 
-                                    <v-list-item>
-                                        <template v-slot:prepend>
-                                            <v-icon color="success" size="small">mdi-check</v-icon>
-                                        </template>
-                                        <v-list-item-title class="text-caption">
-                                            Your industry category and location (city only)
-                                        </v-list-item-title>
-                                    </v-list-item>
-
-                                    <v-list-item>
-                                        <template v-slot:prepend>
-                                            <v-icon color="success" size="small">mdi-check</v-icon>
-                                        </template>
-                                        <v-list-item-title class="text-caption">
-                                            Your business performance metrics (radar chart scores)
-                                        </v-list-item-title>
-                                    </v-list-item>
-
-                                    <v-list-item>
-                                        <template v-slot:prepend>
-                                            <v-icon color="success" size="small">mdi-check</v-icon>
-                                        </template>
-                                        <v-list-item-title class="text-caption">
-                                            Anonymous business name (e.g., "Restaurant A" instead of "Juan's Restaurant")
-                                        </v-list-item-title>
-                                    </v-list-item>
-                                </v-list>
-
-                                <v-divider class="my-4"></v-divider>
-
-                                <h4 class="mb-3">What Stays Private</h4>
-                                <v-list density="compact" class="rounded" bg-color="rgba(255,255,255,0.05)">
-                                    <v-list-item>
-                                        <template v-slot:prepend>
-                                            <v-icon color="error" size="small">mdi-lock</v-icon>
-                                        </template>
-                                        <v-list-item-title class="text-caption">
-                                            Your actual business name and branding
-                                        </v-list-item-title>
-                                    </v-list-item>
-
-                                    <v-list-item>
-                                        <template v-slot:prepend>
-                                            <v-icon color="error" size="small">mdi-lock</v-icon>
-                                        </template>
-                                        <v-list-item-title class="text-caption">
-                                            Individual customer reviews and feedback text
-                                        </v-list-item-title>
-                                    </v-list-item>
-
-                                    <v-list-item>
-                                        <template v-slot:prepend>
-                                            <v-icon color="error" size="small">mdi-lock</v-icon>
-                                        </template>
-                                        <v-list-item-title class="text-caption">
-                                            Your contact information and account details
-                                        </v-list-item-title>
-                                    </v-list-item>
-                                </v-list>
-                                <!-- Benchmarking Access -->
-                                <v-divider class="my-4"></v-divider>
-                                
-                                <div class="pa-4 rounded" style="background: rgba(76, 175, 80, 0.1);">
-                                    <div class="d-flex align-start">
-                                        <v-icon color="success" class="mr-2">mdi-check-circle</v-icon>
-                                        <div>
-                                            <h4 class="text-success mb-1">Benchmarking Unlocked!</h4>
-                                            <p class="text-caption mb-2">
-                                                You can now compare your performance with other public businesses in your industry
-                                            </p>
-                                            <v-btn
-                                                color="success"
-                                                variant="outlined"
-                                                prepend-icon="mdi-chart-bar"
-                                                to="/compare"
-                                            >
-                                                View Industry Benchmarks
-                                            </v-btn>
-                                        </div>
+                            <!-- Benchmarking Access -->
+                            <v-divider class="my-4"></v-divider>
+                            
+                            <div class="pa-4 rounded" style="background: rgba(76, 175, 80, 0.1);">
+                                <div class="d-flex align-start">
+                                    <v-icon color="success" class="mr-2">mdi-check-circle</v-icon>
+                                    <div>
+                                        <h4 class="text-success mb-1">Benchmarking Unlocked!</h4>
+                                        <p class="text-caption mb-2">
+                                            You can now compare your performance with other public businesses in your industry
+                                        </p>
+                                        <v-btn
+                                            color="success"
+                                            variant="outlined"
+                                            prepend-icon="mdi-chart-bar"
+                                            to="/compare"
+                                        >
+                                            View Industry Benchmarks
+                                        </v-btn>
                                     </div>
                                 </div>
                             </div>
-                        </v-expand-transition>
+                        </div>
                     </v-card-text>
                 </v-card>
                 

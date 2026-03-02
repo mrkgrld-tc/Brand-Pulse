@@ -13,10 +13,7 @@
                 <template v-slot:append>
                     <v-icon class="mr-2" id="menu">mdi-menu</v-icon>
                     <v-menu activator="#menu" width="300px" class="pa-5">
-                        <v-list  style="border-radius: 8px">
-                            <v-list-item-title class="mx-3">Company Name</v-list-item-title>
-                            <v-list-item-subtitle class="mx-3">Details</v-list-item-subtitle>
-                            <v-divider class="border-opacity-25 my-2"></v-divider>
+                        <v-list  style="border-radius: 8px; background-color: #151219;">
                             <v-list-item :append-icon="route.icon" v-for="(route, i) in nav" :keys="i" :to="route.path">{{route.title}}</v-list-item>
                             <v-list-item>
                                 <v-btn
@@ -29,6 +26,9 @@
                             </v-list-item>
                         </v-list>
                     </v-menu>
+                    <!-- <div class="d-flex align-center ga-2">
+                        <v-btn v-for="(route, i) in nav">{{route.title}}</v-btn>
+                    </div> -->
                 </template>
             </v-app-bar>
             <template v-if="backgroundActive">
@@ -65,7 +65,7 @@ import { useNotifStore } from './stores/notifStore';
                     {title : 'Dashboard', path : '/', icon : 'mdi-view-dashboard'},
                     {title : 'Profile', path : '/profile', icon : 'mdi-account-outline'},
                     {title : 'Analyze', path : '/analyze', icon : 'mdi-file-chart-outline'},
-                    {title : 'Compare', path : '/compare', icon : 'mdi-file-compare'},
+                    {title : 'Benchmarks', path : '/benchmark', icon : 'mdi-file-compare'},
                 ]
             }
         },
