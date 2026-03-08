@@ -14,11 +14,14 @@ export const useNotifStore = defineStore('notifStore', {
     }),
     actions : {
         showNotif(notif){
-           this.notif = {...notif}
-
-           setTimeout(()=>{
-            this.notif.active = false;
-           }, 2000)
+            if(this.notif.active == false){
+                this.notif = {...notif}
+                if(notif.autoClose){
+                    setTimeout(()=>{
+                        this.notif.active = false;
+                    }, 2000)
+                }
+            }
         },
 
         showToast(toast){

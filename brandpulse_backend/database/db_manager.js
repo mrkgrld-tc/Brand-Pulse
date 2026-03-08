@@ -55,8 +55,24 @@ class MultiDatabaseManager {
     async mysqlQuery(database, sqlQuery, params = []) {
         try {
             const pool = this.getMySQLPool(database);
-            const [rows] = await pool.execute(sqlQuery, params);
-            return rows;
+            
+            // ✅ FIX: Check if this is a bulk insert (VALUES ? with nested array)
+            const isBulkInsert = sqlQuery.toUpperCase().includes('VALUES ?') && 
+                                 Array.isArray(params) && 
+                                 params.length === 1 && 
+                                 Array.isArray(params[0]) &&
+                                 params[0].length > 0 &&
+                                 Array.isArray(params[0][0]);
+            
+            if (isBulkInsert) {
+                // For bulk insert, use query() instead of execute()
+                const [rows] = await pool.query(sqlQuery, params);
+                return rows;
+            } else {
+                // For regular queries, use execute()
+                const [rows] = await pool.execute(sqlQuery, params);
+                return rows;
+            }
         } catch (error) {
             console.error(`MySQL query error on '${database}':`, error);
             throw error;

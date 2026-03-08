@@ -1,5 +1,6 @@
 <template>
     <v-container>
+    <v-row>{{ result }}</v-row>
         <v-row>
             <v-card class="w-100 d-flex flex-column">
                 <v-card-title><p>Analyze</p></v-card-title>
@@ -51,13 +52,20 @@
                     </div>
                     <v-card-text v-if="uploadMethod == 'csv'" class="d-flex flex-column ga-1">
                         <!-- <v-file-upload clearable density="compact" variant="compact"></v-file-upload> -->
-                        <v-file-input variant="solo" prepend-icon="mdi-file" density="compact" label="Feedback Data"></v-file-input>
+                        <v-file-input 
+                            variant="solo" 
+                            prepend-icon="mdi-file" 
+                            density="compact" 
+                            label="Feedback Data"
+                            @change="handleFileUpload" 
+                        ></v-file-input>
                         <div class="d-flex ga-2 align-center">
                             <v-btn 
                                 append-icon="mdi-tray-arrow-down" 
                                 color="primary" 
                                 variant="outlined" 
                                 size="small"
+                                @click="handleDownloadCsv"
                             >download csv format</v-btn>
                         </div>
                     </v-card-text>
@@ -219,7 +227,8 @@
                 
                 <v-card-actions class="d-flex justify-end">
                     <v-btn :disabled="step <= 1" @click="step--" class="rounded-0" prepend-icon="mdi-arrow-left" variant="tonal">previous</v-btn>
-                    <v-btn :disabled="step >= 3" @click="step++" class="rounded-0" append-icon="mdi-arrow-right" variant="tonal">next</v-btn>
+                    <v-btn v-if="step < 2" :disabled="step >= 3" @click="step++" class="rounded-0" append-icon="mdi-arrow-right" variant="tonal">next</v-btn>
+                    <v-btn v-else variant="tonal" @click="handleAnalisys" :disabled="step >= 3">analyze</v-btn>
                 </v-card-actions>
             </v-card>
         </v-row>
@@ -232,6 +241,12 @@ import { VDateInput } from 'vuetify/labs/VDateInput'
 import PieChart from '@/components/PieChart.vue';
 import GaugeChart from '@/components/GaugeChart.vue';
 import BarChart from '@/components/BarChart.vue';
+import { generateCsv } from '@/utilities/generateCsv';
+import { readCsv } from '@/utilities/readCsv';
+import { mapActions, mapState } from 'pinia';
+import { useNotifStore } from '@/utilities/notifStore';
+import { useAnalysisStore } from '@/stores/analysisStore';
+import { useUserStore } from '@/stores/userStore';
     export default {
         components: {
             VFileUpload,
@@ -249,84 +264,7 @@ import BarChart from '@/components/BarChart.vue';
                     {id : 0, date : '', reviews : ''},
                 ],
                 step : 1,
-                feedbacks : [
-                    {
-                        "Date": "09/07/2024",
-                        "Feedback": "The upload process was smooth and intuitive."
-                    },
-                    {
-                        "Date": "09/08/2024",
-                        "Feedback": "Data review section could use clearer labels."
-                    },
-                    {
-                        "Date": "09/09/2024",
-                        "Feedback": "System performance slowed down with larger files."
-                    },
-                    {
-                        "Date": "09/10/2024",
-                        "Feedback": "Helpful tooltips made navigation easier."
-                    },
-                    {
-                        "Date": "09/11/2024",
-                        "Feedback": "Would be great to have a progress bar during upload."
-                    },
-                    {
-                        "Date": "09/12/2024",
-                        "Feedback": "Review Data page displayed inconsistencies in formatting."
-                    },
-                    {
-                        "Date": "09/13/2024",
-                        "Feedback": "App worked well on desktop but lagged on mobile."
-                    },
-                    {
-                        "Date": "09/14/2024",
-                        "Feedback": "Export feature was missing in the final step."
-                    },
-                    {
-                        "Date": "09/15/2024",
-                        "Feedback": "Error messages were too generic, need more detail."
-                    },
-                    {
-                        "Date": "09/07/2024",
-                        "Feedback": "The upload process was smooth and intuitive."
-                    },
-                    {
-                        "Date": "09/08/2024",
-                        "Feedback": "Data review section could use clearer labels."
-                    },
-                    {
-                        "Date": "09/09/2024",
-                        "Feedback": "System performance slowed down with larger files."
-                    },
-                    {
-                        "Date": "09/10/2024",
-                        "Feedback": "Helpful tooltips made navigation easier."
-                    },
-                    {
-                        "Date": "09/11/2024",
-                        "Feedback": "Would be great to have a progress bar during upload."
-                    },
-                    {
-                        "Date": "09/12/2024",
-                        "Feedback": "Review Data page displayed inconsistencies in formatting."
-                    },
-                    {
-                        "Date": "09/13/2024",
-                        "Feedback": "App worked well on desktop but lagged on mobile."
-                    },
-                    {
-                        "Date": "09/14/2024",
-                        "Feedback": "Export feature was missing in the final step."
-                    },
-                    {
-                        "Date": "09/15/2024",
-                        "Feedback": "Error messages were too generic, need more detail."
-                    },
-                    {
-                        "Date": "09/16/2024",
-                        "Feedback": "Overall user experience was positive and efficient."
-                    }
-                ],
+                feedbacks : [],
                 insights: [
                     {
                         type: 'error',
@@ -372,24 +310,66 @@ import BarChart from '@/components/BarChart.vue';
                     { keyword: 'Slow Service', count: 28, example: 'Waited 45 minutes for order' },
                     { keyword: 'Expensive Prices', count: 24, example: 'Sobrang mahal for the serving' },
                     { keyword: 'Limited Parking', count: 15, example: 'Hard to find parking space' }
-                ]
+                ],
+                result : []
             }
         },
         methods: {
+            ...mapActions(useNotifStore, ['showNotif']),
+            ...mapActions(useAnalysisStore, ['analyzeFeedback']),
             processReviewData(data){
-                const processData = data.map((item) => {
-                    return{
-                        id : item.id,
-                        date : item.date.toLocaleDateString(),
-                        reviews : this.stringtoArray(item.reviews)
-                    }
+                let temp = [];
+                console.log(temp)
+                data.forEach((feedback) => {
+                    const reviews = this.stringtoArray(feedback.reviews);
+                    reviews.forEach((item) => {
+                        temp.push({
+                            Date : feedback.date.toLocaleDateString(),
+                            Feedback :  item
+                        })
+                    })
                 })
-                console.log(processData)
+                this.feedbacks = temp;
             },
             stringtoArray(str){
                 return str.split('\n');
+            },
+            handleDownloadCsv(){
+                if(generateCsv()){
+                    this.showNotif({
+                        active : true,
+                        title : 'Success',
+                        subtitle : 'CSV feedback format downloaded',
+                        icon : 'mdi-check-circle-outline',
+                    })
+                }
+            },
+            async handleFileUpload(event){
+                
+                const file = await event.target.files[0];
+
+                this.feedbacks = await readCsv(file)
+
+                console.log(this.feedbacks);
+            },
+            async handleAnalisys(){
+                this.showNotif({
+                    active : true,
+                    title : 'Please Wait',
+                    subtitle : 'please be patient while AI is analyzing data',
+                    icon : 'mdi-loading',
+                })
+                this.result = await this.analyzeFeedback({
+                    userId : this.userData['userId'],
+                    feedbacks : this.feedbacks
+                });
+                this.step++
             }
+        },
+        computed:{
+            ...mapState(useUserStore, ['userData'])
         }
+        
     }
 </script>
 

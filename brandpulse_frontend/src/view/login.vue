@@ -2,114 +2,218 @@
     <div class="auth-page">
         <div class="auth-glow" />
 
-        <v-card width="420" class="auth-card glass-card" elevation="0" rounded="xl">
-        <!-- Header -->
-        <div class="auth-header">
-            <img src="../assets/icons/corporate-culture.gif" alt="BrandPulse" class="auth-logo" />
-            <div class="auth-badge">BrandPulse</div>
-            <h2 class="auth-title">{{ action === 'login' ? 'Welcome back' : 'Create account' }}</h2>
-            <p class="auth-subtitle">
-            {{ action === 'login'
-                ? 'Sign in to access your dashboard'
-                : 'Create Your Account Today' }}
-            </p>
-        </div>
+        <v-card width="420" class="auth-card" elevation="0" rounded="xl">
+          <!-- Header -->
+            <div class="auth-header">
+                <img src="../assets/icons/corporate-culture.gif" alt="BrandPulse" class="auth-logo" />
+                <div class="auth-badge">BrandPulse</div>
+                <h2 class="auth-title">{{ action === 'login' ? 'Welcome back' : 'Create account' }}</h2>
+                <p class="auth-subtitle">
+                {{ action === 'login'
+                    ? 'Sign in to access your dashboard'
+                    : 'Create Your Account Today' }}
+                </p>
+            </div>
 
-        <!-- Form -->
-        <div class="auth-form">
-            <!-- Sign Up only -->
-            <v-text-field
-                v-if="action === 'signup'"
-                v-model="name"
-                label="Full Name"
-                variant="outlined"
-                rounded="lg"
-                density="compact"
-                hide-details
-            >
-                <template #append-inner><v-icon size="18" opacity="0.5">mdi-account-outline</v-icon></template>
-            </v-text-field>
-
-            <v-text-field
-                v-model="email"
-                label="Email address"
-                variant="outlined"
-                rounded="lg"
-                density="compact"
-                hide-details
-            >
-                <template #append-inner><v-icon size="18" opacity="0.5">mdi-email-outline</v-icon></template>
-            </v-text-field>
-
-            <v-text-field
-                v-model="password"
-                label="Password"
-                variant="outlined"
-                rounded="lg"
-                density="compact"
-                hide-details
-                :type="showPassword ? 'text' : 'password'"
-            >
-                <template #append-inner>
-                    <v-icon
-                    size="18"
-                    opacity="0.5"
-                    style="cursor:pointer"
-                    @click="showPassword = !showPassword"
+            <!-- Form -->
+            <div class="auth-form">
+                <!-- Login section -->
+                <template v-if="action == 'login'">
+                    <v-text-field
+                        v-model="email"
+                        label="Email address"
+                        variant="outlined"
+                        rounded="lg"
+                        density="compact"
+                        hide-details
                     >
-                    {{ showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline' }}
-                    </v-icon>
+                        <template #append-inner><v-icon size="18" opacity="0.5">mdi-email-outline</v-icon></template>
+                    </v-text-field>
+
+                    <v-text-field
+                        v-model="password"
+                        label="Password"
+                        variant="outlined"
+                        rounded="lg"
+                        density="compact"
+                        hide-details
+                        :type="showPassword ? 'text' : 'password'"
+                    >
+                        <template #append-inner>
+                            <v-icon
+                            size="18"
+                            opacity="0.5"
+                            style="cursor:pointer"
+                            @click="showPassword = !showPassword"
+                            >
+                            {{ showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline' }}
+                            </v-icon>
+                        </template>
+                    </v-text-field>
+                    <v-btn
+                        color="primary"
+                        rounded="lg"
+                        block
+                        class="auth-submit"
+                        size="large"
+                        @click="handleLogin()"
+                    >
+                        <p>Sign In</p>
+                        <v-icon end>mdi-arrow-right</v-icon>
+                    </v-btn>
                 </template>
-            </v-text-field>
+                <!-- Sign up Section -->
+                <template v-else>
+                    <template v-if="step == 1">
+                        <v-text-field
+                            v-if="action === 'signup'"
+                            v-model="name"
+                            label="Full Name"
+                            variant="outlined"
+                            rounded="lg"
+                            density="compact"
+                            hide-details
+                        >
+                            <template #append-inner><v-icon size="18" opacity="0.5">mdi-account-outline</v-icon></template>
+                        </v-text-field>
 
-            <v-btn
-                color="primary"
-                rounded="lg"
-                block
-                class="auth-submit"
-                size="large"
-                @click="handleAuthSubmit()"
-            >
-            {{ action === 'login' ? 'Sign In' : 'Create Account' }}
-            <v-icon end>mdi-arrow-right</v-icon>
-            </v-btn>
-        </div>
+                        <v-text-field
+                            v-model="email"
+                            label="Email address"
+                            variant="outlined"
+                            rounded="lg"
+                            density="compact"
+                            hide-details
+                        >
+                            <template #append-inner><v-icon size="18" opacity="0.5">mdi-email-outline</v-icon></template>
+                        </v-text-field>
 
-        <!-- Footer -->
-        <div class="auth-footer">
-            <span class="auth-footer-text">
-            {{ action === 'login' ? "Don't have an account?" : 'Already have an account?' }}
-            </span>
-            <button class="auth-link" @click="toggle">
-            {{ action === 'login' ? 'Sign up free' : 'Sign in' }}
-            </button>
-        </div>
+                        <v-text-field
+                            v-model="password"
+                            label="Password"
+                            variant="outlined"
+                            rounded="lg"
+                            density="compact"
+                            hide-details
+                            :type="showPassword ? 'text' : 'password'"
+                        >
+                            <template #append-inner>
+                                <v-icon
+                                size="18"
+                                opacity="0.5"
+                                style="cursor:pointer"
+                                @click="showPassword = !showPassword"
+                                >
+                                {{ showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline' }}
+                                </v-icon>
+                            </template>
+                        </v-text-field>
+                    </template>
+
+                    <template v-if="step == 2">
+                        <v-text-field
+                            v-if="action === 'signup'"
+                            v-model="address"
+                            label="Address"
+                            variant="outlined"
+                            rounded="lg"
+                            density="compact"
+                            hide-details
+                        >
+                            <template #append-inner><v-icon size="18" opacity="0.5">mdi-account-outline</v-icon></template>
+                        </v-text-field>
+
+                        <v-text-field
+                            v-model="contactNumber"
+                            label="Contact Number"
+                            variant="outlined"
+                            rounded="lg"
+                            density="compact"
+                            hide-details
+                        >
+                            <template #append-inner><v-icon size="18" opacity="0.5">mdi-email-outline</v-icon></template>
+                        </v-text-field>
+                    </template>
+
+                    <template v-if="step == 3">
+                        <v-text-field
+                            v-if="action === 'signup'"
+                            v-model="companyName"
+                            label="Company Name"
+                            variant="outlined"
+                            rounded="lg"
+                            density="compact"
+                            hide-details
+                        >
+                            <template #append-inner><v-icon size="18" opacity="0.5">mdi-account-outline</v-icon></template>
+                        </v-text-field>
+
+                        <v-text-field
+                            v-model="industry"
+                            label="Industry"
+                            variant="outlined"
+                            rounded="lg"
+                            density="compact"
+                            hide-details
+                        >
+                            <template #append-inner><v-icon size="18" opacity="0.5">mdi-email-outline</v-icon></template>
+                        </v-text-field>
+                    </template>
+                    <v-btn
+                        color="primary"
+                        rounded="lg"
+                        block
+                        class="auth-submit"
+                        size="large"
+                        @click="handleSignUp()"
+                    >
+                        {{ step <= 2 ? 'Next' : 'Create Account' }}
+                        <v-icon end>mdi-arrow-right</v-icon>
+                    </v-btn>
+                </template>
+            </div>
+
+            <!-- Footer -->
+            <div class="auth-footer">
+                <span class="auth-footer-text">
+                {{ action === 'login' ? "Don't have an account?" : 'Already have an account?' }}
+                </span>
+                <button class="auth-link" @click="toggle">
+                {{ action === 'login' ? 'Sign up free' : 'Sign in' }}
+                </button>
+            </div>
         </v-card>
     </div>
 </template>
 
 <script>
-import { useAuthStore } from '@/stores/authStore';
-import { useNotifStore } from '@/stores/notifStore';
+import router from '@/router';
+import { useUserStore } from '@/stores/userStore';
+import { useNotifStore } from '@/utilities/notifStore';
 import { mapActions, mapState } from 'pinia';
 export default {
     data() {
         return {
-        action: 'login',
-        showPassword: false,
-        name: '',
-        email: '',
-        password: '',
+            action: 'login',
+            step : 1,
+            showPassword: false,
+            name: '',
+            email: '',
+            password: '',
+            address : '',
+            contactNumber : '',
+            companyName : '',
+            industry : '',
         }
     },
     methods: {
-        ...mapActions(useAuthStore, ['logIn', 'signUp']),
+        ...mapActions(useUserStore, ['logIn', 'signUp']),
         ...mapActions(useNotifStore, ['showNotif']),
         toggle() {
             this.action = this.action === 'login' ? 'signup' : 'login'
             this.showPassword = false
         },
-        handleAuthSubmit(){
+        handleLogin(){
             if(this.password.length == 0 || this.email.length == 0){
                 this.showNotif({
                     active : true,
@@ -118,25 +222,64 @@ export default {
                     icon : 'mdi-alert-circle-outline',
                 })
             }else{
-                if(this.action =='login'){
-                    const data = {
-                        email : this.email,
-                        password : this.password
-                    }
-                    this.logIn(data);
+                 const data = {
+                    email : this.email,
+                    password : this.password
+                }
+                this.logIn(data);   
+            }
+        },
+        handleSignUp(){
+            if(this.step == 1){
+                if(this.password.length == 0 || this.email.length == 0 || !this.validateEmail(this.email) || !this.validatePassword(this.password)){
+                    this.showNotif({
+                        active : true,
+                        title : 'Form Empty',
+                        subtitle : 'Please fill up all fields',
+                        icon : 'mdi-alert-circle-outline',
+                    })
+                }else{
+                    this.step ++
+                }
+            }else if(this.step == 2){
+                if(this.address.length == 0 || this.contactNumber.length == 0){
+                    this.showNotif({
+                        active : true,
+                        title : 'Form Empty',
+                        subtitle : 'Please fill up all fields',
+                        icon : 'mdi-alert-circle-outline',
+                    })
+                }else{
+                    this.step++
+                }
+            }else if(this.step == 3){
+                if(this.companyName.length == 0 || this.industry.length == 0){
+                    this.showNotif({
+                        active : true,
+                        title : 'Form Empty',
+                        subtitle : 'Please fill up all fields',
+                        icon : 'mdi-alert-circle-outline',
+                    })
                 }else{
                     const data = {
-                        username : this.name,
-                        email : this.email,
-                        password : this.password
+                        name: this.name,
+                        email: this.email,
+                        password: this.password,
+                        address : this.address,
+                        contactNumber : this.contactNumber,
+                        companyName : this.companyName,
+                        industry : this.industry,
                     }
-                    if(this.validateInput()){
-                        this.signUp(data);
-                        this.action = 'login'
-                        this.email = '';
-                        this.password = '';
-                        this.name = '';
-                    }
+                    this.signUp(data);
+                    this.action = 'login';
+                    this.step = 1;
+                    this.name = '';
+                    this.email = '';
+                    this.password = '';
+                    this.address = '';
+                    this.contactNumber = '';
+                    this.companyName = '';
+                    this.industry = '';
                 }
             }
         },
@@ -177,10 +320,26 @@ export default {
         validatePassword(password){
             // const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; 
             // return regex.test(password);
+            if(password.length < 8 && this.action == 'signup'){
+                this.showNotif({
+                    active : true,
+                    title : 'Invalid Password',
+                    subtitle : 'Please insert valid password',
+                    icon : 'mdi-alert-circle-outline',
+                }) 
+            }
             return password.length > 7
         },
         validateEmail(email){
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!regex.test(email)){
+                this.showNotif({
+                    active : true,
+                    title : 'Invalid Email',
+                    subtitle : 'Please use valid email',
+                    icon : 'mdi-alert-circle-outline',
+                }) 
+            }
             return regex.test(email);
         },
         
@@ -265,11 +424,6 @@ export default {
   gap: 14px;
 }
 
-.auth-forgot {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: -6px;
-}
 
 .auth-link {
   background: none;
@@ -308,15 +462,6 @@ export default {
 .auth-divider span {
   font-size: 0.8rem;
   white-space: nowrap;
-}
-
-.auth-google {
-  opacity: 0.85;
-  transition: opacity 0.2s;
-}
-
-.auth-google:hover {
-  opacity: 1;
 }
 
 /* Footer */

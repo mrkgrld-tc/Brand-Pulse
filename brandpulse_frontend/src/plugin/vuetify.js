@@ -37,7 +37,7 @@ const vuetify = createVuetify({
             ]
         }, 
         VCard : {
-            class : ['rounded-lg', 'glass-card'],
+            class : ['rounded-lg', 'glass-card', 'card-glow'],
             variant : ''
         },
         VTextField : {
@@ -46,6 +46,9 @@ const vuetify = createVuetify({
         },
         VCardTitle : {
             style: [{ fontSize: 'clamp(0.9rem, 1.5vw, 1.3rem)!important' }]
+        },
+        VIcon : {
+            opacity : 0.5,
         }
     }
 })

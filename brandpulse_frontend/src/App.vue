@@ -21,7 +21,7 @@
                                     block
                                     color="primary"
                                     variant="outlined"
-                                    to="/landingpage"
+                                    @click="handleLogout()"
                                 ></v-btn>
                             </v-list-item>
                         </v-list>
@@ -52,8 +52,9 @@
 <script>
 import AnimatedBackground from '@/components/AnimatedBackground.vue'
 import Notification from './components/Notification.vue';
-import { mapState } from 'pinia';
-import { useNotifStore } from './stores/notifStore';
+import { mapState, mapActions } from 'pinia';
+import { useNotifStore } from './utilities/notifStore';
+import { useUserStore } from './stores/userStore';
     export default {
         components : {
             AnimatedBackground,
@@ -67,6 +68,12 @@ import { useNotifStore } from './stores/notifStore';
                     {title : 'Analyze', path : '/analyze', icon : 'mdi-file-chart-outline'},
                     {title : 'Benchmarks', path : '/benchmark', icon : 'mdi-file-compare'},
                 ]
+            }
+        },
+        methods : {
+            ...mapActions(useUserStore,['logout']),
+            handleLogout(){
+                this.logout()
             }
         },
         computed : {

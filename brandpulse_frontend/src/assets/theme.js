@@ -11,7 +11,7 @@ const customDarkTheme = {
       'on-surface-variant': '#a89bc2', // Muted purple-tinted text
       
       // Primary (Discord Blurple)
-      primary: '#5865F2',
+      primary: '#5865f2ff',
       'primary-darken-1': '#4752C4',
       'primary-lighten-1': '#7289DA',
       
