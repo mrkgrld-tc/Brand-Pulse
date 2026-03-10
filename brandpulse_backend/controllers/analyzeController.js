@@ -28,6 +28,7 @@ module.exports = {
             console.log('📊 Step 3: Generating SWOT analysis...');
             const swot = await generateSWOT(analyzedResults);
             
+            console.log("Step 4: Inserting to Database")
             //Save to database here
             const DB = await getDbManager();    
             // save to analysis table
@@ -78,17 +79,17 @@ module.exports = {
             //save to swot table
             const swotQuery = `
                 INSERT INTO swot
-                (swot_id, strength, weaknesses, opportunities, threats) 
+                (analysis_id, strength, weaknesses, opportunities, threats) 
                 VALUES (?, ?, ?, ?, ?)
             `
             const swotValues = [
+                insertAnalysis.insertId,
                 JSON.stringify(swot.strengths),
                 JSON.stringify(swot.weaknesses),
                 JSON.stringify(swot.opportunities),
                 JSON.stringify(swot.threats),
             ]
             const insertSwot = await DB.query('brand_pulse', swotQuery, swotValues);
-            console.log(insertSwot);
             res.json({
                 success: true,
                 message: 'Analysis complete',
