@@ -43,6 +43,7 @@ You are a sentiment analysis expert specializing in Filipino customer feedback (
 
 Analyze the following customer reviews and for EACH review provide:
 1. sentiment: "positive", "neutral", or "negative"
+2. satisfaction : number between 0-100 (how satisfied the customer are based on the feedback)
 2. confidence: number between 0-100 (how confident you are)
 3. keywords: array of 3-5 important keywords from the review
 4. themes: array of main topics mentioned (e.g., "food quality", "service speed", "price", "cleanliness")
@@ -62,6 +63,7 @@ CRITICAL INSTRUCTIONS:
         {
             "index": 0,
             "sentiment": "negative",
+            "satisfaction": "85",
             "confidence": 85,
             "keywords": ["salty", "fries", "taste"],
             "themes": ["food quality", "taste"],

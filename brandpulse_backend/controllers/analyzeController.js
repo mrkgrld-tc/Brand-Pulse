@@ -42,7 +42,7 @@ module.exports = {
             
             const resultsQuery = `
                 INSERT INTO results 
-                (date, analysis_id, feedback, sentiment, confidence, keywords, themes, summary) 
+                (date, analysis_id, feedback, sentiment, satisfaction, confidence, keywords, themes, summary) 
                 VALUES ?
             `;
             
@@ -52,6 +52,7 @@ module.exports = {
                 insertAnalysis.insertId,
                 data.text,
                 data.sentiment,
+                data.satisfaction,
                 data.confidence,
                 JSON.stringify(data.keywords),
                 JSON.stringify(data.themes),
