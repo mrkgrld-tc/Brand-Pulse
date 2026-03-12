@@ -1,6 +1,5 @@
 <template>
     <v-container>
-    <v-row>{{ result }}</v-row>
         <v-row>
             <v-card class="w-100 d-flex flex-column">
                 <v-card-title><p>Analyze</p></v-card-title>
@@ -315,7 +314,7 @@ import { useUserStore } from '@/stores/userStore';
             }
         },
         methods: {
-            ...mapActions(useNotifStore, ['showNotif']),
+            ...mapActions(useNotifStore, ['showNotif', 'hideNotif']),
             ...mapActions(useAnalysisStore, ['analyzeFeedback']),
             processReviewData(data){
                 let temp = [];
@@ -353,17 +352,19 @@ import { useUserStore } from '@/stores/userStore';
                 console.log(this.feedbacks);
             },
             async handleAnalisys(){
-                this.showNotif({
-                    active : true,
-                    title : 'Please Wait',
-                    subtitle : 'please be patient while AI is analyzing data',
-                    icon : 'mdi-loading',
-                })
-                this.result = await this.analyzeFeedback({
+                const res = await this.analyzeFeedback({
                     userId : this.userData['userId'],
                     feedbacks : this.feedbacks
                 });
-                this.step++
+                if(this.result.success){
+                    this.result = {
+                        results : res.results,
+                        insights : res.insights,
+                        swot : res.swot,
+                        count : res.count,
+                    },
+                    this.step++;
+                }
             }
         },
         computed:{

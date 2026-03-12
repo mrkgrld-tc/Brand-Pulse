@@ -7,6 +7,7 @@ export const useNotifStore = defineStore('notifStore', {
             title : 'Notification',
             subtitle : 'subtitle',
             icon : 'mdi-bell-outline',
+            autoClose : true,
         },
         toast : [
 
@@ -23,7 +24,9 @@ export const useNotifStore = defineStore('notifStore', {
                 }
             }
         },
-
+        hideNotif(){
+            this.notif.active = false;
+        },  
         showToast(toast){
             
         }

@@ -30,6 +30,7 @@ export const useUserStore = defineStore('userStore' , {
                         title : 'Warning',
                         subtitle : 'Log in Failed, Account not Found',
                         icon : 'mdi-alert-circle-outline',
+                        autoClose : true,
                     })
                 }else if(res.data.message == 'wrong password'){
                     notifStore.showNotif({
@@ -37,6 +38,7 @@ export const useUserStore = defineStore('userStore' , {
                         title : 'Warning',
                         subtitle : 'Log in Failed, Wrong Password',
                         icon : 'mdi-alert-circle-outline',
+                        autoClose : true,
                     })
                 }else if(res.data.message == 'proceed to login'){
                     notifStore.showNotif({
@@ -44,6 +46,7 @@ export const useUserStore = defineStore('userStore' , {
                         title : 'Welcome',
                         subtitle : 'Log in Successful',
                         icon : 'mdi-check-circle-outline',
+                        autoClose : true,
                     })
                     const resUserData = res.data['userData'];
                     this.userData = {
@@ -77,6 +80,7 @@ export const useUserStore = defineStore('userStore' , {
                     title : 'Error',
                     subtitle : 'Log in Failed, an error occured',
                     icon : 'mdi-alert-circle-outline',
+                    autoClose : true,
                 })
             }
         },
@@ -94,6 +98,7 @@ export const useUserStore = defineStore('userStore' , {
                         title : 'Notice',
                         subtitle : 'An account with this email, already exist',
                         icon : 'mdi-information-outline',
+                        autoClose : true,
                     })
                 }else{
                     notifStore.showNotif({
@@ -101,6 +106,7 @@ export const useUserStore = defineStore('userStore' , {
                         title : 'Success',
                         subtitle : 'Created account successfully',
                         icon : 'mdi-check-circle-outline',
+                        autoClose : true,
                     })
                 }
             }else{
@@ -109,6 +115,7 @@ export const useUserStore = defineStore('userStore' , {
                     title : 'Failed',
                     subtitle : 'An error occured',
                     icon : 'mdi-alert-circle-outline',
+                    autoClose : true,
                 })
             }
         },
@@ -134,6 +141,7 @@ export const useUserStore = defineStore('userStore' , {
                     title : 'Success',
                     subtitle : 'Updated account successfully',
                     icon : 'mdi-check-circle-outline',
+                    autoClose : true,
                 });
                 this.userData.username = data.username;
                 this.userData.address = data.address;
@@ -148,6 +156,7 @@ export const useUserStore = defineStore('userStore' , {
                     title : 'Failed',
                     subtitle : 'An error occured while updating profile',
                     icon : 'mdi-alert-circle-outline',
+                    autoClose : true,
                 })
             }
         }

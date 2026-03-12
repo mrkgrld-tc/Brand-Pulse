@@ -9,7 +9,7 @@
                 <h3>DashBoard</h3>
                 <div class="d-flex ga-1">
                     <v-btn to="/analyze">Analyze</v-btn>
-                    <v-btn to="/compare">Compare</v-btn>
+                    <v-btn to="/benchmark">benchmark</v-btn>
                 </div>
             </div>
         </v-row>
@@ -48,7 +48,7 @@
                     <v-col cols="6" style="display: flex;">
                         <v-card style="flex: 1;" class="summary-card">
                         <v-card-text>
-                            <p class="text-caption summary-cards-title">Overall Rating</p>
+                            <p class="text-caption summary-cards-title">Overall Average</p>
                             <h1 class="text-primary summary-cards-stat">45%</h1>
                         </v-card-text>
                         </v-card>

@@ -147,17 +147,19 @@
                         >
                             <template #append-inner><v-icon size="18" opacity="0.5">mdi-account-outline</v-icon></template>
                         </v-text-field>
-
-                        <v-text-field
+                        <v-select
                             v-model="industry"
                             label="Industry"
                             variant="outlined"
                             rounded="lg"
                             density="compact"
                             hide-details
+                            :items="industries"
+                            item-title="label"
+                            item-value="industry_id"
                         >
                             <template #append-inner><v-icon size="18" opacity="0.5">mdi-email-outline</v-icon></template>
-                        </v-text-field>
+                        </v-select>
                     </template>
                     <v-btn
                         color="primary"
@@ -187,10 +189,10 @@
 </template>
 
 <script>
-import router from '@/router';
 import { useUserStore } from '@/stores/userStore';
 import { useNotifStore } from '@/utilities/notifStore';
 import { mapActions, mapState } from 'pinia';
+import api from '@/plugin/axios';
 export default {
     data() {
         return {
@@ -203,6 +205,7 @@ export default {
             address : '',
             contactNumber : '',
             companyName : '',
+            industries : [],
             industry : '',
         }
     },
@@ -220,6 +223,7 @@ export default {
                     title : 'Form Empty',
                     subtitle : 'Please fill up all fields',
                     icon : 'mdi-alert-circle-outline',
+                    autoClose : true,
                 })
             }else{
                  const data = {
@@ -237,6 +241,7 @@ export default {
                         title : 'Form Empty',
                         subtitle : 'Please fill up all fields',
                         icon : 'mdi-alert-circle-outline',
+                        autoClose : true,
                     })
                 }else{
                     this.step ++
@@ -248,6 +253,7 @@ export default {
                         title : 'Form Empty',
                         subtitle : 'Please fill up all fields',
                         icon : 'mdi-alert-circle-outline',
+                        autoClose : true,
                     })
                 }else{
                     this.step++
@@ -259,6 +265,7 @@ export default {
                         title : 'Form Empty',
                         subtitle : 'Please fill up all fields',
                         icon : 'mdi-alert-circle-outline',
+                        autoClose : true,
                     })
                 }else{
                     const data = {
@@ -290,6 +297,7 @@ export default {
                     title : 'Invalid User Name',
                     subtitle : 'Username must not contain numerical character',
                     icon : 'mdi-alert-circle-outline',
+                    autoClose : true,
                 })
                 return false;
             }
@@ -299,6 +307,7 @@ export default {
                     title : 'Invalid Password',
                     subtitle : 'Password must be atleast 8 character',
                     icon : 'mdi-alert-circle-outline',
+                    autoClose : true,
                 })
                 return false;
             }
@@ -308,6 +317,7 @@ export default {
                     title : 'Invalid Email',
                     subtitle : 'Insert a valid Email Address',
                     icon : 'mdi-alert-circle-outline',
+                    autoClose : true,
                 })
                 return false;
             }
@@ -326,6 +336,7 @@ export default {
                     title : 'Invalid Password',
                     subtitle : 'Please insert valid password',
                     icon : 'mdi-alert-circle-outline',
+                    autoClose : true,
                 }) 
             }
             return password.length > 7
@@ -338,12 +349,19 @@ export default {
                     title : 'Invalid Email',
                     subtitle : 'Please use valid email',
                     icon : 'mdi-alert-circle-outline',
+                    autoClose : true,
                 }) 
             }
             return regex.test(email);
         },
-        
+        async getIndustry(){
+            const res = await api.post('/getIndustries');
+            this.industries = res.data.industries;
+        }
     },
+    mounted(){
+        this.getIndustry();
+    }
 }
 </script>
 

@@ -43,11 +43,16 @@ You are a sentiment analysis expert specializing in Filipino customer feedback (
 
 Analyze the following customer reviews and for EACH review provide:
 1. sentiment: "positive", "neutral", or "negative"
-2. satisfaction : number between 0-100 (how satisfied the customer are based on the feedback)
-2. confidence: number between 0-100 (how confident you are)
-3. keywords: array of 3-5 important keywords from the review
-4. themes: array of main topics mentioned (e.g., "food quality", "service speed", "price", "cleanliness")
-5. summary: one brief sentence summarizing the review
+2. satisfaction: number between 0-100 based on customer satisfaction level:
+   - 0-20: Very dissatisfied (major complaints, very negative)
+   - 21-40: Dissatisfied (complaints, negative experience)
+   - 41-60: Neutral (mixed feelings, neither satisfied nor dissatisfied)
+   - 61-80: Satisfied (positive experience, minor issues)
+   - 81-100: Very satisfied (highly positive, exceptional experience)
+3. confidence: number between 0-100 (how confident you are)
+4. keywords: array of 3-5 important keywords from the review
+5. themes: array of main topics mentioned (e.g., "food quality", "service speed", "price", "cleanliness")
+6. summary: one brief sentence summarizing the review
 
 Customer Reviews:
 ${reviewsList}
@@ -56,18 +61,27 @@ CRITICAL INSTRUCTIONS:
 - Respond ONLY with valid JSON
 - Do NOT include markdown code blocks
 - Do NOT include any explanation
+- Satisfaction and confidence must be NUMBERS, not strings
 - Use this EXACT format:
-
 {
     "results": [
         {
             "index": 0,
             "sentiment": "negative",
-            "satisfaction": "85",
+            "satisfaction": 30,
             "confidence": 85,
             "keywords": ["salty", "fries", "taste"],
             "themes": ["food quality", "taste"],
             "summary": "Customer found the fries too salty"
+        },
+        {
+            "index": 1,
+            "sentiment": "positive",
+            "satisfaction": 95,
+            "confidence": 98,
+            "keywords": ["delicious", "sisig", "crispy"],
+            "themes": ["food quality", "taste"],
+            "summary": "Customer loved the crispy and tasty sisig"
         }
     ]
 }
@@ -111,6 +125,7 @@ const mergeResults = (feedbackList, analysisResults) => {
             return {
                 ...feedback,
                 sentiment: 'neutral',
+                satisfaction: 50,
                 confidence: 0,
                 keywords: [],
                 themes: [],
@@ -122,6 +137,7 @@ const mergeResults = (feedbackList, analysisResults) => {
             date: feedback.Date,
             text: feedback.Feedback,
             sentiment: analysis.sentiment,
+            satisfaction: analysis.satisfaction,
             confidence: analysis.confidence,
             keywords: analysis.keywords,
             themes: analysis.themes,

@@ -30,6 +30,10 @@ module.exports = {
                             ON user.user_id = company.user_id
                         INNER JOIN account_preference
                             ON user.user_id = account_preference.user_id
+                        INNER JOIN industries
+                            ON company.industry_id = industries.industry_id
+                        INNER JOIN plan
+                            ON account_preference.plan_id = plan.plan_id
                     WHERE 
                         user.user_id =  '${userId}'
                     `
@@ -39,11 +43,14 @@ module.exports = {
 
                 bcrypt.compare(enteredPassword, storedHash, (err, result) => {
                     if (err) throw err;
+                    const data = userData[0];
                     if (result) {
                         res.json({
                             success : true,
                             message : 'proceed to login',
-                            userData : userData[0],
+                            userData : {
+
+                            },
                         })
                     } else {
                         res.json({
@@ -97,7 +104,7 @@ module.exports = {
                 DB.query('brand_pulse',
                     `
                     INSERT INTO company
-                        (user_id, name, industry) 
+                        (user_id, name, industry_id) 
                     VALUES 
                         ('${result.insertId}','${companyName}','${industry}')
                     `
@@ -114,13 +121,16 @@ module.exports = {
                             ('${result.insertId}', '${hash}')
                         `
                     )
-                    console.log('insert hash', hash)
                 });
-               
+               //Insert into plan table
+               const insertPlan = await DB.query(`brand_pulse`, `
+                    INSERT INTO plan(end_date)
+                    VALUES (DATE_ADD(CURDATE(), INTERVAL 30 DAY))
+                `)
                 //isnert into user_preferense table
                 DB.query('brand_pulse',
                     `
-                    INSERT INTO account_preference(user_id) VALUES ('${result.insertId}')
+                        INSERT INTO account_preference(user_id, plan_id) VALUES (${result.insertId}, ${insertPlan.insertId})
                     `
                 )
                 res.json({
@@ -147,7 +157,7 @@ module.exports = {
                     UPDATE company 
                         SET 
                         name = '${updateData.companyName}',
-                        industry = '${updateData.industry}' 
+                        industry_id = '${updateData.industry}' 
                     WHERE company_id = ${updateData.companyId}
                 `)
             //update profile
@@ -167,6 +177,20 @@ module.exports = {
             })
         } catch (error) {
             console.log('updateProfile: ', error)
+        }
+    },
+
+    getIndustries : async (req, res) => {
+        try {
+            const DB = await getDbManager();
+
+            const industries = await DB.query('brand_pulse', `
+                    SELECT * FROM
+                    industries
+                `)
+            res.json({industries});
+        } catch (error) {
+            console.log('Get Industries Error: ', error)
         }
     }
 }

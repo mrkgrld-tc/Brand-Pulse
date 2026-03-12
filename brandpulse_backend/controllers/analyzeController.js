@@ -19,7 +19,7 @@ module.exports = {
             // STEP 1: Analyze sentiment
             console.log('🔍 Step 1: Analyzing sentiment...');
             const analyzedResults = await analyzeFeedback(feedback);
-            
+
             // STEP 2: Generate insights
             console.log('💡 Step 2: Generating insights...');
             const insights = await generateInsights(analyzedResults);
@@ -91,6 +91,7 @@ module.exports = {
                 JSON.stringify(swot.threats),
             ]
             const insertSwot = await DB.query('brand_pulse', swotQuery, swotValues);
+            
             res.json({
                 success: true,
                 message: 'Analysis complete',
