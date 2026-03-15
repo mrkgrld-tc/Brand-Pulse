@@ -3,6 +3,20 @@
 </template>
 <script>
 export default {
+    props :{
+        positive : {
+            type : Number,
+            default : 20
+        },
+        negative : {
+            type : Number,
+            default : 20
+        },
+        neutral : {
+            type : Number,
+            default : 20
+        },
+    },
     data() {
         return {
             lineStyle : {
@@ -37,9 +51,9 @@ export default {
                             '#C62828', '#2E7D32', '#1565C0'
                         ],
                         data: [
-                            { value: 800, name: 'Negative' },
-                            { value: 735, name: 'Positive' },
-                            { value: 580, name: 'Neutral' },
+                            { value: this.negative, name: 'Negative' },
+                            { value: this.positive, name: 'Positive' },
+                            { value: this.neutral, name: 'Neutral' },
                         ]
                     }
                 ]

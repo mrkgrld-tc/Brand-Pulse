@@ -49,7 +49,7 @@ module.exports = {
                             success : true,
                             message : 'proceed to login',
                             userData : {
-
+                                ...data
                             },
                         })
                     } else {

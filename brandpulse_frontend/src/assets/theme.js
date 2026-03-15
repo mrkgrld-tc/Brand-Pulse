@@ -20,7 +20,7 @@ const customDarkTheme = {
       'secondary-darken-1': '#C13A00',
       
       // Status colors
-      error: '#ED4245',            // Discord red
+      error: 'rgb(237, 66, 69)',            // Discord red
       info: '#00A8FC',            // Discord link blue
       success: '#3BA55D',         // Discord green
       warning: '#FAA81A',         // Discord yellow

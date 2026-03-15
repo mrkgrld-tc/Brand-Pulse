@@ -5,9 +5,12 @@ import * as directives from 'vuetify/directives'
 
 import '@mdi/font/css/materialdesignicons.css'
 import { customDarkTheme, customLightTheme } from '../assets/theme'
-
+import Loader from '@/components/Loader.vue'
 const vuetify = createVuetify({
-    components,
+    components : {
+        ...components,
+        Loader,
+    },
     directives,
     icons: {
         defaultSet: 'mdi',
@@ -45,7 +48,7 @@ const vuetify = createVuetify({
             density : 'compact'
         },
         VCardTitle : {
-            style: [{ fontSize: 'clamp(0.9rem, 1.5vw, 1.3rem)!important' }]
+            style: [{ fontSize: 'clamp(1rem, 1.5vw, 1.3rem)!important' }]
         },
         VIcon : {
             opacity : 0.5,

@@ -123,69 +123,158 @@
                         <v-btn to="/compare">Compare</v-btn>
                     </v-card-subtitle>
                     <v-divider class="border-opacity-25 my-1 mx-4"></v-divider>
-                    <v-card-subtitle><p>Overview</p></v-card-subtitle>
                     <v-row class="mx-3" dense>
-                        <v-col cols="6" sm="3" md="3" lg="3">
-                            <v-card>
+                        <v-col cols="6" sm="6" md="3" lg="3">
+                            <v-card class="d-flex">
                                 <v-card-text>
-                                    <p class="text-caption summary-cards-title">Total</p>
-                                    <h1 class="text-primary summary-cards-stat">45</h1>
+                                    <v-card-subtitle>Total</v-card-subtitle>
+                                    <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
+                                        <p>{{ overallCount.total }}</p>
+                                        <v-icon color="info">mdi-file-chart</v-icon>
+                                    </v-card-title>
+                                    <v-chip size="small" class="float-right">Confidence Ave: {{ confidence.toFixed(2) }}%</v-chip>
                                 </v-card-text>
                             </v-card>
                         </v-col>
-                        <v-col cols="6" sm="3" md="3" lg="3">
-                            <v-card>
+                        <v-col cols="6" sm="6" md="3" lg="3">
+                            <v-card class="d-flex">
                                 <v-card-text>
-                                    <p class="text-caption summary-cards-title">Positive</p>
-                                    <h1 class="text-success summary-cards-stat">45</h1>
+                                    <v-card-subtitle>Positive</v-card-subtitle>
+                                    <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
+                                        <p>{{ overallCount.positive }}</p>
+                                        <v-icon color="success">mdi-trending-up</v-icon>
+                                    </v-card-title>
+                                    <v-chip size="small" class="float-right">{{overallCount.positivePercentage.toFixed(2)}}%</v-chip>
                                 </v-card-text>
                             </v-card>
                         </v-col>
-                        <v-col cols="6" sm="3" md="3" lg="3">
-                            <v-card>
+                        <v-col cols="6" sm="6" md="3" lg="3">
+                            <v-card class="d-flex">
                                 <v-card-text>
-                                    <p class="text-caption summary-cards-title">Negative</p>
-                                    <h1 class="text-error summary-cards-stat">45</h1>
+                                    <v-card-subtitle>Negative</v-card-subtitle>
+                                    <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
+                                        <p>{{ overallCount.negative }}</p>
+                                        <v-icon color="red">mdi-trending-down</v-icon>
+                                    </v-card-title>
+                                    <v-chip size="small" class="float-right">{{overallCount.negativePercentage.toFixed(2)}}%</v-chip>
                                 </v-card-text>
                             </v-card>
                         </v-col>
-                        <v-col cols="6" sm="3" md="3" lg="3">
-                            <v-card>
+                        <v-col cols="6" sm="6" md="3" lg="3">
+                            <v-card class="d-flex">
                                 <v-card-text>
-                                    <p class="text-caption summary-cards-title">Neutral</p>
-                                    <h1 class="text-blue summary-cards-stat">45</h1>
+                                    <v-card-subtitle>Overall Satisfaction</v-card-subtitle>
+                                    <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
+                                        <p>85</p>
+                                        <v-icon>mdi-gauge</v-icon>
+                                    </v-card-title>
+                                    <v-chip size="small" class="float-right">4% lower</v-chip>
                                 </v-card-text>
                             </v-card>
                         </v-col>
                     </v-row>
                     <v-row class="mx-3" dense>
-                        <v-col cols="12" sm="6" md="6" lg="6">
-                            <v-card class="chart-card" height="300" style="flex: 1;">
-                                <v-card-subtitle class="position-absolute mt-2"><p>Sentiment Distrubution</p></v-card-subtitle>
-                                <PieChart/>
-                            </v-card>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="6" lg="6">
-                            <v-card class="chart-card" height="300" style="flex: 1;">
-                                <v-card-subtitle class="position-absolute mt-2"><p>Overall Satisfaction</p></v-card-subtitle>
-                                <GaugeChart :value="80" title=""/>
+                        <v-col cols="12">
+                            <v-card>
+                                <v-card-title><p>Sentiment Distribution</p></v-card-title>
+                                <v-card-text>
+                                    <v-row dense>
+                                        <v-col cols="12" sm="12" md="6" lg="6">
+                                            <v-list-subtitle class="d-flex ga-2">
+                                                <v-icon color="green">mdi-trending-up</v-icon>
+                                                <p>Positive</p>
+                                            </v-list-subtitle>
+                                            <Loader :progress="overallCount.positivePercentage.toFixed(2)"></Loader>
+                                        </v-col>
+                                        <v-col cols="12" sm="12" md="6" lg="6">
+                                            <v-list-subtitle class="d-flex ga-2">
+                                                <v-icon color="red">mdi-trending-down</v-icon>
+                                                <p>Negative</p>
+                                            </v-list-subtitle>
+                                            <Loader :progress="overallCount.negativePercentage.toFixed(2)"></Loader>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
                             </v-card>
                         </v-col>
                         <v-col cols="12">
                             <v-card>
-                                <v-card-subtitle class="mt-2 position-absolute">
-                                    <p>Most Mentioned Keywords</p>
-                                </v-card-subtitle>
-                                <BarChart title=""/>
+                                <v-card-title><p>Sentiments Overtime</p></v-card-title>
+                                <LineChart 
+                                    :date="Object.keys(dateCount)" 
+                                    :positive="Object.entries(dateCount).map(([key, value]) => (value.positive))"
+                                    :negative="Object.entries(dateCount).map(([key, value]) => (value.negative))"
+                                ></LineChart>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="3" lg="3">
+                            <v-card style="border-left: 4px solid green">
+                                <v-card-title class="mt-2"><p>Strength</p></v-card-title>
+                                <v-card-text>
+                                    <p v-for="item in strengths">-{{ item }}</p>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="3" lg="3">
+                            <v-card style="border-left: 4px solid orange">
+                                <v-card-title class="mt-2"><p>Weaknesses</p></v-card-title>
+                                <v-card-text>
+                                    <p v-for="item in weaknesses">-{{ item }}</p>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="3" lg="3">
+                            <v-card style="border-left: 4px solid blue">
+                                <v-card-title class="mt-2"><p>Opportunities</p></v-card-title>
+                                <v-card-text>
+                                    <p v-for="item in opportunities">-{{ item }}</p>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="3" lg="3">
+                            <v-card style="border-left: 4px solid red">
+                                <v-card-title class="mt-2"><p>Threats</p></v-card-title>
+                                <v-card-text>
+                                    <p v-for="item in threats">-{{ item }}</p>
+                                </v-card-text>
                             </v-card>
                         </v-col>
                         <v-col cols="12">
                             <v-card>
-                                <v-card-subtitle class="mt-2"><p>Actionable Insights & Recommendations</p></v-card-subtitle>
+                                <v-card-title>
+                                    <p>Word Analysis</p>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-row dense>
+                                        <v-col cols="12">
+                                            <v-card-subtitle><p>Mentioned Themes</p></v-card-subtitle>
+                                            <fieldset class="rounded-lg pa-1">
+                                                <v-chip 
+                                                    v-for="theme in wordFrequency"  
+                                                    class="ma-1"
+                                                >{{`${theme.theme} (${theme.count})`}}</v-chip>
+                                            </fieldset>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-card-subtitle><p>Mentioned Keywords</p></v-card-subtitle>
+                                            <fieldset class="rounded-lg pa-1">
+                                                <v-chip 
+                                                    v-for="keyword in keywordFrequency"  
+                                                    class="ma-1"
+                                                >{{`${keyword.keyword} (${keyword.count})`}}</v-chip>
+                                            </fieldset>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-card>
+                                <v-card-title class="mt-2"><p>Actionable Insights & Recommendations</p></v-card-title>
                                 <v-card-text>
                                     <template v-for="(insight, i) in insights" :key="i">
                                         <v-card 
-                                            :style="`border-opacity : 0.4 ;border: 1px groove ${colorLib[insight.type]}`" 
+                                            :style="`border-left: 4px solid ${colorLib[insight.sentiment_type]}`" 
                                             class="pa-4 mb-2 rounded-lg d-flex flex-column ga-1 overflow-visible">
                                             <p style="font-size: 1.05rem">{{ insight.title }}</p>
                                             <p>{{ insight.description }}</p>
@@ -194,7 +283,7 @@
                                                     :color="colorLib[insight.priority]"
                                                     class="position-absolute right-0 top-0"
                                                     style="margin-top: -8px; margin-right: -8px"
-                                                    variant="elevated"
+                                                    variant="tonal"
                                                 >
                                                     {{ insight.priority }} priority
                                                 </v-chip>
@@ -205,20 +294,36 @@
                         </v-col>
                         <v-col cols="12">
                             <v-card>
-                                <v-card-subtitle class="mt-2 d-flex justify-space-between">
+                                <v-card-title class="mt-2 d-flex justify-space-between align-center">
                                     <p>Feedback List</p>
-                                </v-card-subtitle>
+                                    <div class="d-flex ga-1-align-center w-50">
+                                        <v-text-field 
+                                            label="Search"
+                                            density="compact"
+                                            hide-details
+                                            v-model="resultSearch"
+                                            class="rounded-xl"
+                                        ></v-text-field>
+                                    </div>
+                                </v-card-title>
                                 <v-card-text>
-                                    <v-table>
-                                        <thead>
-                                            <tr>
-                                                <th>Type</th>
-                                                <th>Review</th>
-                                                <th>Date</th>
-                                            </tr>
-                                        </thead>
-                                    </v-table>
+                                    <v-row dense>
+                                        <v-col class="d-flex flex-column" cols="12" sm="12" md="4" lg="4" v-for="(result, i) in paginatedResults" :key="1">
+                                            <v-card class="flex-grow-1" :style="`border-left: 4px solid ${colorLib[result.type]}`" >
+                                                <v-card-title style="font-size: 0.9rem" class="d-flex align-center justify-space-between">
+                                                    <p>{{ result.date }}</p>
+                                                    <p>Score: {{ result.score }}</p>
+                                                </v-card-title>
+                                                <v-card-text><p>{{ result.feedback }}</p></v-card-text>
+                                            </v-card>
+                                        </v-col>
+                                    </v-row>
                                 </v-card-text>
+                                <v-card-actions class="d-flex ga-2 justify-end">
+                                    <v-btn :disabled="page<=1" @click="page--" icon="mdi-chevron-left"></v-btn>
+                                    <p>Page {{page}} of {{pageCount}}</p>
+                                    <v-btn :disabled="page>=pageCount" @click="page++" icon="mdi-chevron-right"></v-btn>
+                                </v-card-actions>
                             </v-card>
                         </v-col>
                     </v-row>
@@ -246,13 +351,15 @@ import { mapActions, mapState } from 'pinia';
 import { useNotifStore } from '@/utilities/notifStore';
 import { useAnalysisStore } from '@/stores/analysisStore';
 import { useUserStore } from '@/stores/userStore';
+import LineChart from '@/components/LineChart.vue';
     export default {
         components: {
             VFileUpload,
             VDateInput,
             PieChart,
             GaugeChart,
-            BarChart
+            BarChart,
+            LineChart
         },
         data(){
             return{
@@ -264,32 +371,22 @@ import { useUserStore } from '@/stores/userStore';
                 ],
                 step : 1,
                 feedbacks : [],
-                insights: [
-                    {
-                        type: 'error',
-                        priority: 'high',
-                        title: 'Service Speed is a Major Complaint',
-                        description: '28 customers mentioned slow service. Consider adding more staff during peak hours or streamlining your order process.'
-                    },
-                    {
-                        type: 'success',
-                        priority: 'medium',
-                        title: 'Food Quality is Your Biggest Strength',
-                        description: '56 customers praised your food! Highlight this in your marketing materials and social media.'
-                    },
-                    {
-                        type: 'warning',
-                        priority: 'high',
-                        title: 'Price Sensitivity Detected',
-                        description: '24 customers mentioned high prices. Consider introducing budget-friendly options or value meals.'
-                    },
-                    {
-                        type: 'info',
-                        priority: 'low',
-                        title: 'Positive Trend This Week',
-                        description: 'Sentiment improved 12% compared to last week. Keep up the good work!'
-                    },
-                ],
+
+                overallCount : {},
+                overAllSatisfaction : 0,
+                confidence : 0,
+                wordFrequency : [],
+                keywordFrequency : [],
+                insights: [],
+                strengths: [],
+                opportunities: [],
+                weaknesses: [],
+                threats : [],
+                results : [],
+                dateCount : {},
+                resultSearch : '',
+
+                page : 1,
                 colorLib : {
                     error: 'rgba(237, 66, 69, 0.5)',      
                     info: 'rgba(0, 168, 252, 0.5)',       
@@ -297,20 +394,11 @@ import { useUserStore } from '@/stores/userStore';
                     warning: 'rgba(250, 168, 26, 0.5)',
                     low : 'info',
                     medium : 'warning',
-                    high : 'error'
+                    high : 'error',
+                    negative : 'red',
+                    positive : 'green',
+                    neutral : 'blue'
                 },
-                strengths: [
-                    { keyword: 'Delicious Food', count: 56, example: 'Ang sarap ng pagkain!' },
-                    { keyword: 'Friendly Staff', count: 42, example: 'Staff are so accommodating' },
-                    { keyword: 'Clean Environment', count: 38, example: 'Very clean and organized' }
-                ],
-
-                weaknesses: [
-                    { keyword: 'Slow Service', count: 28, example: 'Waited 45 minutes for order' },
-                    { keyword: 'Expensive Prices', count: 24, example: 'Sobrang mahal for the serving' },
-                    { keyword: 'Limited Parking', count: 15, example: 'Hard to find parking space' }
-                ],
-                result : []
             }
         },
         methods: {
@@ -318,7 +406,6 @@ import { useUserStore } from '@/stores/userStore';
             ...mapActions(useAnalysisStore, ['analyzeFeedback']),
             processReviewData(data){
                 let temp = [];
-                console.log(temp)
                 data.forEach((feedback) => {
                     const reviews = this.stringtoArray(feedback.reviews);
                     reviews.forEach((item) => {
@@ -348,27 +435,127 @@ import { useUserStore } from '@/stores/userStore';
                 const file = await event.target.files[0];
 
                 this.feedbacks = await readCsv(file)
-
-                console.log(this.feedbacks);
             },
             async handleAnalisys(){
                 const res = await this.analyzeFeedback({
                     userId : this.userData['userId'],
                     feedbacks : this.feedbacks
                 });
-                if(this.result.success){
+                if(res.success){
                     this.result = {
                         results : res.results,
                         insights : res.insights,
                         swot : res.swot,
                         count : res.count,
                     },
+                    await this.processData()
                     this.step++;
                 }
+            },
+            async processData(){
+                //get summarry cards value
+                let count = {
+                    positive : 0,
+                    negative : 0,
+                    total : this.result.count,
+                }
+
+                let satisfactionTotal = 0;
+
+                let themeCount = {};
+                let keywordCount = {};
+                let dateCount = {};
+                let confidenceTotal = 0;
+                this.result['results'].forEach(item => {
+                    if(item['sentiment'] == 'positive'){
+                        count.positive ++
+                    }
+                    if(item['sentiment'] == 'negative'){
+                        count.negative ++
+                    }
+                    
+                    satisfactionTotal += item.satisfaction;
+
+                    item.themes.forEach(theme => {
+                        if (!themeCount[theme]) {
+                            themeCount[theme] = 1;
+                        } else {
+                            themeCount[theme]++;
+                        }
+                    })
+
+                    item.keywords.forEach(keyword => {
+                        if (!keywordCount[keyword]) {
+                            keywordCount[keyword] = 1;
+                        } else {
+                            keywordCount[keyword]++;
+                        }
+                    })
+
+                    dateCount[item.date] = dateCount[item.date] || {};
+                    dateCount[item.date][item.sentiment] = (dateCount[item.date][item.sentiment] || 0) + 1;
+
+                    confidenceTotal += item.confidence;
+                });
+               this.dateCount = dateCount;
+
+                this.overallCount = {...count, positivePercentage : (count.positive / count.total) * 100, negativePercentage : (count.negative / count.total) * 100,};
+                //get overall satisfaction
+                this.overAllSatisfaction = satisfactionTotal / count.total;
+
+                //get themes ranking
+                const themeFrequency = Object.entries(themeCount).map(([theme, count]) => ({
+                    theme, count
+                })).sort((a, b) => b.count - a.count);
+
+                this.wordFrequency = themeFrequency;
+
+                //get keyword frequency
+                const keywordFrequency = Object.entries(keywordCount).map(([keyword, count]) => ({
+                    keyword, count
+                })).sort((a, b) => b.count - a.count);
+
+                this.wordFrequency = themeFrequency;
+                this.keywordFrequency = keywordFrequency;
+
+                //confidence ave
+                this.confidence = confidenceTotal / this.result.count;
+                //set up insights
+                this.insights = this.result['insights']
+
+                //populate feedback list
+                this.results = this.result['results'].map(item => ({
+                    date : item.date,
+                    type : item.sentiment,
+                    score : item.satisfaction,
+                    feedback : item.text
+                }))
+
+                //set up SWOT
+                this.strengths = this.result['swot'].strengths;
+                this.opportunities = this.result['swot'].opportunities;
+                this.weaknesses = this.result['swot'].weaknesses;
+                this.threats = this.result['swot'].threats;
+
             }
         },
         computed:{
-            ...mapState(useUserStore, ['userData'])
+            ...mapState(useUserStore, ['userData']),
+            pageCount() {
+                return Math.ceil(this.results.length / 9)
+            },
+            filterResult(){
+                if(this.resultSearch == ''){
+                    return this.results;
+                }else{
+                    return this.results.filter(item => item.feedback.toUpperCase().includes(this.resultSearch.toUpperCase()))
+                }
+            },
+            paginatedResults() {
+                const start = (this.page - 1) * 9
+                const end = start + 9
+                return this.filterResult.slice(start, end)
+            }
         }
         
     }

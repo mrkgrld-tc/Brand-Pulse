@@ -42,7 +42,7 @@ const buildPrompt = (feedbackList) => {
 You are a sentiment analysis expert specializing in Filipino customer feedback (Tagalog, English, and Taglish).
 
 Analyze the following customer reviews and for EACH review provide:
-1. sentiment: "positive", "neutral", or "negative"
+1. sentiment: "positive", "negative"
 2. satisfaction: number between 0-100 based on customer satisfaction level:
    - 0-20: Very dissatisfied (major complaints, very negative)
    - 21-40: Dissatisfied (complaints, negative experience)
@@ -124,7 +124,7 @@ const mergeResults = (feedbackList, analysisResults) => {
         if (!analysis) {
             return {
                 ...feedback,
-                sentiment: 'neutral',
+                sentiment: 'positive',
                 satisfaction: 50,
                 confidence: 0,
                 keywords: [],
