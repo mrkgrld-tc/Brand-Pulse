@@ -62,8 +62,9 @@ export default {
                         borderWidth: 3,
                     }
                 },
-                indexAxis: 'y',
+                indexAxis: 'x',
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         position: 'top',

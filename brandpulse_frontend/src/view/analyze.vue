@@ -240,33 +240,11 @@
                             </v-card>
                         </v-col>
                         <v-col cols="12">
-                            <v-card>
-                                <v-card-title>
-                                    <p>Word Analysis</p>
-                                </v-card-title>
-                                <v-card-text>
-                                    <v-row dense>
-                                        <v-col cols="12">
-                                            <v-card-subtitle><p>Mentioned Themes</p></v-card-subtitle>
-                                            <fieldset class="rounded-lg pa-1">
-                                                <v-chip 
-                                                    v-for="theme in wordFrequency"  
-                                                    class="ma-1"
-                                                >{{`${theme.theme} (${theme.count})`}}</v-chip>
-                                            </fieldset>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-card-subtitle><p>Mentioned Keywords</p></v-card-subtitle>
-                                            <fieldset class="rounded-lg pa-1">
-                                                <v-chip 
-                                                    v-for="keyword in keywordFrequency"  
-                                                    class="ma-1"
-                                                >{{`${keyword.keyword} (${keyword.count})`}}</v-chip>
-                                            </fieldset>
-                                        </v-col>
-                                    </v-row>
-                                </v-card-text>
-                            </v-card>
+                            <wordChart
+                                :word-frequency="wordFrequency"
+                                :keyword-frequency="keywordFrequency"
+                                @search-keyword="handleSearchKeyword"
+                            />                        
                         </v-col>
                         <v-col cols="12">
                             <v-card>
@@ -309,7 +287,7 @@
                                 <v-card-text>
                                     <v-row dense>
                                         <v-col class="d-flex flex-column" cols="12" sm="12" md="4" lg="4" v-for="(result, i) in paginatedResults" :key="1">
-                                            <v-card class="flex-grow-1" :style="`border-left: 4px solid ${colorLib[result.type]}`" >
+                                            <v-card @click="feedbackDetaildata = result, feedbackDetailModel = true" class="flex-grow-1" :style="`border-left: 4px solid ${colorLib[result.type]}`" >
                                                 <v-card-title style="font-size: 0.9rem" class="d-flex align-center justify-space-between">
                                                     <p>{{ result.date }}</p>
                                                     <p>Score: {{ result.score }}</p>
@@ -336,6 +314,25 @@
                 </v-card-actions>
             </v-card>
         </v-row>
+        <v-dialog v-model="feedbackDetailModel" width="500px">
+            <v-card class="tonal" style="background-color: rgb(42, 35, 51)!important">
+                <v-card-text>
+                    <p style="font-size: 1.1rem">{{ feedbackDetaildata.date }}</p>
+                    <p class="mt-2">{{ feedbackDetaildata.summary }}</p>
+
+                    <p class="mt-2">Customer Talk About:</p>
+                    <v-chip v-for="theme in feedbackDetaildata.themes" class="mr-1">{{ theme }}</v-chip>
+
+                    <p class="mt-2">Sentiment: </p>
+                    <v-chip>{{ feedbackDetaildata.type }}</v-chip>
+                    <p class="mt-2">Confidence Level:</p>
+                    <v-chip>{{ feedbackDetaildata.confidence }}%</v-chip>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn color="warning" variant="tonal" @click="feedbackDetailModel = false">Close</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
 
@@ -352,6 +349,7 @@ import { useNotifStore } from '@/utilities/notifStore';
 import { useAnalysisStore } from '@/stores/analysisStore';
 import { useUserStore } from '@/stores/userStore';
 import LineChart from '@/components/LineChart.vue';
+import wordChart from '@/components/wordChart.vue';
     export default {
         components: {
             VFileUpload,
@@ -359,7 +357,8 @@ import LineChart from '@/components/LineChart.vue';
             PieChart,
             GaugeChart,
             BarChart,
-            LineChart
+            LineChart,
+            wordChart
         },
         data(){
             return{
@@ -386,6 +385,8 @@ import LineChart from '@/components/LineChart.vue';
                 dateCount : {},
                 resultSearch : '',
 
+                feedbackDetailModel : false,
+                feedbackDetaildata : {},
                 page : 1,
                 colorLib : {
                     error: 'rgba(237, 66, 69, 0.5)',      
@@ -528,7 +529,10 @@ import LineChart from '@/components/LineChart.vue';
                     date : item.date,
                     type : item.sentiment,
                     score : item.satisfaction,
-                    feedback : item.text
+                    feedback : item.text,
+                    themes : item.themes,
+                    summary : item.summary,
+                    confidence : item.confidence
                 }))
 
                 //set up SWOT
@@ -537,7 +541,7 @@ import LineChart from '@/components/LineChart.vue';
                 this.weaknesses = this.result['swot'].weaknesses;
                 this.threats = this.result['swot'].threats;
 
-            }
+            },
         },
         computed:{
             ...mapState(useUserStore, ['userData']),

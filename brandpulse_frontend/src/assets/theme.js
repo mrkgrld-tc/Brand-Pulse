@@ -5,7 +5,7 @@ const customDarkTheme = {
       // Main backgrounds
       background: '#1a1520',        // Deep dark purple base
       surface: '#151219',           // Deeper purple for sidebars
-      'surface-bright': '#2a2333',  // Purple hover states
+      'surface-bright': 'rgb(42, 35, 51)',  // Purple hover states
       'surface-light': '#221c2b',   // Elevated purple surfaces
       'surface-variant': '#0e0b12', // Darkest purple background
       'on-surface-variant': '#a89bc2', // Muted purple-tinted text
