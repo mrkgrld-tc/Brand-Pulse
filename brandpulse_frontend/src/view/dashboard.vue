@@ -1,82 +1,99 @@
 <template>
     <v-container>
-        <v-system-bar v-if="demoPrompt" class="bg-red d-flex justify-center opacity-50">
-            <p>This is  just demo data</p>
-            <v-icon @click="demoPrompt = falsez" class="position-absolute right-0 mr-2">mdi-close</v-icon>
-        </v-system-bar>
-        <v-row>
-            <div class="w-100 d-flex align-center mb-2 justify-space-between">
-                <h3>DashBoard</h3>
-                <div class="d-flex ga-1">
-                    <v-btn to="/analyze">Analyze</v-btn>
-                    <v-btn to="/benchmark">benchmark</v-btn>
-                </div>
-            </div>
-        </v-row>
-        <v-row align="stretch" dense>
-            <!-- summary cards -->
-            <v-col lg="5" md="5" sm="5" cols="12" style="display: flex; flex-direction: column; gap: 2px;">
-                <v-row dense style="flex: 1;">
-                    <v-col cols="6" style="display: flex;">
-                        <v-card style="flex: 1;" class="summary-card">
-                            <v-card-text>
-                                <p class="text-caption summary-cards-title">Total Reviews</p>
-                                <h1 class="text-blue summary-cards-stat">45</h1>
-                                <!-- <p><v-icon color="success" icon="mdi-trending-up"/> 45% higher</p> -->
-                            </v-card-text>
-                        </v-card>
-                    </v-col>
-                    <v-col cols="6" style="display: flex;">
-                        <v-card style="flex: 1;" class="summary-card">
-                        <v-card-text>
-                            <p class="text-caption summary-cards-title">Positive Reviews</p>
-                            <h1 class="text-success summary-cards-stat">45</h1>
-                        </v-card-text>
-                        </v-card>
-                    </v-col>
-                </v-row>
-
-                <v-row dense style="flex: 1;">
-                    <v-col cols="6" style="display: flex;">
-                        <v-card style="flex: 1;" class="summary-card">
-                        <v-card-text>
-                            <p class="text-caption summary-cards-title">Negative Reviews</p>
-                            <h1 class="text-red summary-cards-stat">45</h1>
-                        </v-card-text>
-                        </v-card>
-                    </v-col>
-                    <v-col cols="6" style="display: flex;">
-                        <v-card style="flex: 1;" class="summary-card">
-                        <v-card-text>
-                            <p class="text-caption summary-cards-title">Overall Average</p>
-                            <h1 class="text-primary summary-cards-stat">45%</h1>
-                        </v-card-text>
-                        </v-card>
-                    </v-col>
-                </v-row>
-                <v-row dense style="flex: 1;">
-                    <v-col cols="12">
-                        <v-card class="chart-card" height="300" style="flex: 1;">
-                            <GaugeChart :value="80"/>
-                        </v-card>
-                    </v-col>
-                </v-row>
-            </v-col>
-
-            <v-col lg="7" md="7" sm="7" cols="12">
-                <v-card class="chart-card mb-2" height="250" style="flex: 1;">
-                    <BarChart/>
-                </v-card>
-                <v-card class="chart-card" height="300" style="flex: 1;">
-                    <RadarChart/>
+        <v-row class="mx-3" dense>
+            <v-col cols="6" sm="6" md="3" lg="3">
+                <v-card class="d-flex">
+                    <v-card-text>
+                        <v-card-subtitle>Total</v-card-subtitle>
+                        <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
+                            <p>{{ 23 }}</p>
+                            <v-icon color="info">mdi-file-chart</v-icon>
+                        </v-card-title>
+                        <v-chip size="small" class="float-right">Confidence Ave: {{ 43 }}%</v-chip>
+                    </v-card-text>
                 </v-card>
             </v-col>
-        </v-row>
-        <v-row align="stretch" dense>
+            <v-col cols="6" sm="6" md="3" lg="3">
+                <v-card class="d-flex">
+                    <v-card-text>
+                        <v-card-subtitle>Positive</v-card-subtitle>
+                        <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
+                            <p>{{ 43 }}</p>
+                            <v-icon color="success">mdi-trending-up</v-icon>
+                        </v-card-title>
+                        <v-chip size="small" class="float-right">{{34}}%</v-chip>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            <v-col cols="6" sm="6" md="3" lg="3">
+                <v-card class="d-flex">
+                    <v-card-text>
+                        <v-card-subtitle>Negative</v-card-subtitle>
+                        <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
+                            <p>{{34 }}</p>
+                            <v-icon color="red">mdi-trending-down</v-icon>
+                        </v-card-title>
+                        <v-chip size="small" class="float-right">{{34}}%</v-chip>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            <v-col cols="6" sm="6" md="3" lg="3">
+                <v-card class="d-flex">
+                    <v-card-text>
+                        <v-card-subtitle>Overall Satisfaction</v-card-subtitle>
+                        <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
+                            <p>85</p>
+                            <v-icon>mdi-gauge</v-icon>
+                        </v-card-title>
+                        <v-chip size="small" class="float-right">4% lower</v-chip>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+
             <v-col cols="12">
-                <v-card class="chart-card" height="300" style="flex: 1;">
+                <v-card>
+                    <v-card-title><p>Sentiment Distribution</p></v-card-title>
+                    <v-card-text>
+                        <v-row dense>
+                            <v-col cols="12" sm="12" md="6" lg="6">
+                                <v-list-subtitle class="d-flex ga-2">
+                                    <v-icon color="green">mdi-trending-up</v-icon>
+                                    <p>Positive</p>
+                                </v-list-subtitle>
+                                <Loader :progress="45"></Loader>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="6" lg="6">
+                                <v-list-subtitle class="d-flex ga-2">
+                                    <v-icon color="red">mdi-trending-down</v-icon>
+                                    <p>Negative</p>
+                                </v-list-subtitle>
+                                <Loader :progress="45"></Loader>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+
+
+            <v-col cols="12">
+                <v-card>
+                    <v-card-title><p>Sentiments Overtime</p></v-card-title>
+                    <!-- <LineChart 
+                        :date="Object.keys(dateCount)" 
+                        :positive="Object.entries(dateCount).map(([key, value]) => (value.positive))"
+                        :negative="Object.entries(dateCount).map(([key, value]) => (value.negative))"
+                    ></LineChart> -->
                     <LineChart/>
                 </v-card>
+            </v-col>
+
+            <v-col cols="12">
+                <!-- <wordChart
+                    :word-frequency="wordFrequency"
+                    :keyword-frequency="keywordFrequency"
+                    @search-keyword="handleSearchKeyword"
+                />                         -->
+                <wordChart/>
             </v-col>
         </v-row>
     </v-container>
@@ -87,6 +104,7 @@
     import BarChart from '@/components/BarChart.vue';
     import GaugeChart from '@/components/GaugeChart.vue';
     import RadarChart from '@/components/RadarChart.vue';
+    import wordChart from '@/components/wordChart.vue';
     export default {
         data(){
             return{
@@ -97,7 +115,8 @@
             LineChart,
             BarChart,
             GaugeChart,
-            RadarChart
+            RadarChart,
+            wordChart
         }
     }
 </script>

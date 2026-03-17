@@ -38,6 +38,11 @@
                 <template v-if="step == 1">
                     <v-card-subtitle><p>Step 1: Upload Feedbacks</p></v-card-subtitle>
                     <v-divider class="border-opacity-25 my-1 mx-4"></v-divider>
+                    <v-card-text class="d-flex ga-2 align-center">
+                        <v-text-field label="Other Company" hide-details density="compact"></v-text-field>
+                        <p>or</p>
+                        <v-radio label="Your Company" value="value"></v-radio>
+                    </v-card-text>
                     <div class="d-flex ga-2 mx-4">
                         <div class="d-flex flex-column">
                             <v-btn variant="plain" @click="uploadMethod = 'csv'">CSV</v-btn>
@@ -120,7 +125,7 @@
                 <template v-if="step == 3">
                     <v-card-subtitle class="d-flex align-center justify-space-between">
                         <p>Step 3: Display Analysis Result</p>
-                        <v-btn to="/compare">Compare</v-btn>
+                        <v-btn to="/benchmark">Benchmark</v-btn>
                     </v-card-subtitle>
                     <v-divider class="border-opacity-25 my-1 mx-4"></v-divider>
                     <v-row class="mx-3" dense>
