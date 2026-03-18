@@ -2,11 +2,11 @@ const getDbManager  = require('../database/db_manager');
 const { analyzeFeedback, generateInsights, generateSWOT } = require('../services/geminiService');
 
 module.exports = {
-    analyzeFeedback1 : async (req, res) => {
+    analyzeFeedback : async (req, res) => {
         try {
             const feedback = req.body.feedbacks;
             const userid = req.body.userId;
-            
+            const company = req.body.company;
             if (!feedback || !Array.isArray(feedback) || feedback.length === 0) {
                 return res.status(400).json({
                     success: false,
@@ -31,15 +31,38 @@ module.exports = {
             console.log("Step 4: Inserting to Database")
             //Save to database here
             const DB = await getDbManager();    
-            // save to analysis table
-            const analysisQuery = `
-                INSERT INTO analysis
-                (user_id, date) 
-                VALUES (?, NOW())
-            `
-            const analysisData = [userid]
-            const insertAnalysis = await DB.query('brand_pulse', analysisQuery, analysisData)
-            
+            let insertAnalysis = null;
+            //Isnert to Company
+            if(company.own){
+                // save to analysis table
+                const analysisQuery = `
+                    INSERT INTO analysis
+                    (user_id, company_id, date) 
+                    VALUES (?, ?, NOW())
+                `
+                const analysisData = [userid, company.company.company_id];
+                const insertAnalysis = await DB.query('brand_pulse', analysisQuery, analysisData);
+            }else{
+                //save company to database
+                const companyQuery = `
+                    INSERT INTO company
+                        (user_id, name, industry_id) VALUES 
+                        (?, ?, ?)
+                `
+                const companyData = [userid, company.company.companyName, company.company.industryId]
+                const insertCompany = await DB.query('brand_pulse', companyQuery, companyData)
+
+                //insert analysis
+                const companyId = insertCompany.insertId;
+                const analysisQuery = `
+                    INSERT INTO analysis
+                    (user_id, company_id, date) 
+                    VALUES (?, ?, NOW())
+                `
+                const analysisData = [userid, companyId];
+                insertAnalysis = await DB.query('brand_pulse', analysisQuery, analysisData);
+            }
+
             const resultsQuery = `
                 INSERT INTO results 
                 (date, analysis_id, feedback, sentiment, satisfaction, confidence, keywords, themes, summary) 
@@ -110,7 +133,7 @@ module.exports = {
             });
         }
     },
-    analyzeFeedback : async (req, res) => {
+    analyzeFeedback1 : async (req, res) => {
         res.json({
             "success": true,
             "message": "Analysis complete",

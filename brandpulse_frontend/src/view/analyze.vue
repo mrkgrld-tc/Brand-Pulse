@@ -38,10 +38,12 @@
                 <template v-if="step == 1">
                     <v-card-subtitle><p>Step 1: Upload Feedbacks</p></v-card-subtitle>
                     <v-divider class="border-opacity-25 my-1 mx-4"></v-divider>
-                    <v-card-text class="d-flex ga-2 align-center">
-                        <v-text-field label="Other Company" hide-details density="compact"></v-text-field>
-                        <p>or</p>
-                        <v-radio label="Your Company" value="value"></v-radio>
+                    <v-radio-group v-model="ownCompany" inline hide-details>
+                        <v-radio label="Own Business" value="yes"></v-radio>
+                        <v-radio label="Competitors" value="no"></v-radio>
+                    </v-radio-group>
+                    <v-card-text v-if="ownCompany == 'no'" class="d-flex ga-2 align-center">
+                        <v-text-field v-model="competitorCompanyName" label="Company Name" hide-details density="compact"></v-text-field>
                     </v-card-text>
                     <div class="d-flex ga-2 mx-4">
                         <div class="d-flex flex-column">
@@ -339,6 +341,7 @@
             </v-card>
         </v-dialog>
     </v-container>
+    {{ analyzeCompany }}
 </template>
 
 <script>
@@ -405,6 +408,9 @@ import wordChart from '@/components/wordChart.vue';
                     positive : 'green',
                     neutral : 'blue'
                 },
+
+                competitorCompanyName : '',
+                ownCompany : 'yes',
             }
         },
         methods: {
@@ -445,7 +451,8 @@ import wordChart from '@/components/wordChart.vue';
             async handleAnalisys(){
                 const res = await this.analyzeFeedback({
                     userId : this.userData['userId'],
-                    feedbacks : this.feedbacks
+                    feedbacks : this.feedbacks,
+                    company : this.analyzeCompany
                 });
                 if(res.success){
                     this.result = {
@@ -549,7 +556,7 @@ import wordChart from '@/components/wordChart.vue';
             },
         },
         computed:{
-            ...mapState(useUserStore, ['userData']),
+            ...mapState(useUserStore, ['userData', 'companyData']),
             pageCount() {
                 return Math.ceil(this.results.length / 9)
             },
@@ -564,6 +571,19 @@ import wordChart from '@/components/wordChart.vue';
                 const start = (this.page - 1) * 9
                 const end = start + 9
                 return this.filterResult.slice(start, end)
+            },
+            analyzeCompany(){
+                if(this.ownCompany == 'yes'){
+                    return {
+                        own : true,
+                        company : this.companyData
+                    }
+                }else{
+                    return {
+                        own : false,
+                        company : {companyName : this.competitorCompanyName, industryId : this.companyData['industryId']}
+                    }
+                }
             }
         }
         
