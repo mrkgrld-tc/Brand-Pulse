@@ -2,7 +2,7 @@ import { utils, writeFile } from 'xlsx'
 export const generateCsv = async ()=>{
     const template = [
         {
-            Date : '2026-03-06',
+            Date : '2026-03-06 (mm/dd/yyyy)',
             Feedback : 'Service is good'
         }
     ];

@@ -136,8 +136,7 @@
                                 <v-card-text>
                                     <v-card-subtitle>Total</v-card-subtitle>
                                     <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
-                                        <p>{{ overallCount.total }}</p>
-                                        <v-icon color="info">mdi-file-chart</v-icon>
+                                        <p class="text-info">{{ overallCount?.total }}</p>
                                     </v-card-title>
                                     <v-chip size="small" class="float-right">Confidence Ave: {{ confidence.toFixed(2) }}%</v-chip>
                                 </v-card-text>
@@ -148,10 +147,9 @@
                                 <v-card-text>
                                     <v-card-subtitle>Positive</v-card-subtitle>
                                     <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
-                                        <p>{{ overallCount.positive }}</p>
-                                        <v-icon color="success">mdi-trending-up</v-icon>
+                                        <p class="text-success">{{ overallCount?.positive }}</p>
                                     </v-card-title>
-                                    <v-chip size="small" class="float-right">{{overallCount.positivePercentage.toFixed(2)}}%</v-chip>
+                                    <v-chip size="small" class="float-right">{{overallCount.positivePercentage}}%</v-chip>
                                 </v-card-text>
                             </v-card>
                         </v-col>
@@ -160,10 +158,9 @@
                                 <v-card-text>
                                     <v-card-subtitle>Negative</v-card-subtitle>
                                     <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
-                                        <p>{{ overallCount.negative }}</p>
-                                        <v-icon color="red">mdi-trending-down</v-icon>
+                                        <p class="text-error">{{ overallCount?.negative }}</p>
                                     </v-card-title>
-                                    <v-chip size="small" class="float-right">{{overallCount.negativePercentage.toFixed(2)}}%</v-chip>
+                                    <v-chip size="small" class="float-right">{{overallCount.negativePercentage}}%</v-chip>
                                 </v-card-text>
                             </v-card>
                         </v-col>
@@ -172,8 +169,7 @@
                                 <v-card-text>
                                     <v-card-subtitle>Overall Satisfaction</v-card-subtitle>
                                     <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
-                                        <p>85</p>
-                                        <v-icon>mdi-gauge</v-icon>
+                                        <p class="text-warning">{{overAllSatisfaction}}</p>
                                     </v-card-title>
                                     <v-chip size="small" class="float-right">4% lower</v-chip>
                                 </v-card-text>
@@ -191,14 +187,14 @@
                                                 <v-icon color="green">mdi-trending-up</v-icon>
                                                 <p>Positive</p>
                                             </v-list-subtitle>
-                                            <Loader :progress="overallCount.positivePercentage.toFixed(2)"></Loader>
+                                            <Loader :progress="overallCount.positivePercentage"></Loader>
                                         </v-col>
                                         <v-col cols="12" sm="12" md="6" lg="6">
                                             <v-list-subtitle class="d-flex ga-2">
                                                 <v-icon color="red">mdi-trending-down</v-icon>
                                                 <p>Negative</p>
                                             </v-list-subtitle>
-                                            <Loader :progress="overallCount.negativePercentage.toFixed(2)"></Loader>
+                                            <Loader :progress="overallCount.negativePercentage"></Loader>
                                         </v-col>
                                     </v-row>
                                 </v-card-text>
@@ -341,7 +337,6 @@
             </v-card>
         </v-dialog>
     </v-container>
-    {{ analyzeCompany }}
 </template>
 
 <script>
@@ -465,95 +460,141 @@ import wordChart from '@/components/wordChart.vue';
                     this.step++;
                 }
             },
-            async processData(){
-                //get summarry cards value
-                let count = {
-                    positive : 0,
-                    negative : 0,
-                    total : this.result.count,
-                }
+            async processData() {
+                const results = this.result['results'];
+                const count = results.length;
 
-                let satisfactionTotal = 0;
+                // Calculate all metrics
+                this.overallCount = this.calculateSentimentCounts(results, count);
+                this.overAllSatisfaction = this.calculateAverageSatisfaction(results, count);
+                this.confidence = this.calculateAverageConfidence(results, count);
+                this.wordFrequency = this.calculateThemeFrequency(results);
+                this.keywordFrequency = this.calculateKeywordFrequency(results);
+                this.dateCount = this.calculateSentimentByDate(results);
+                
+                // Set up insights
+                this.insights = this.result['insights'];
+                
+                // Populate feedback list
+                this.results = this.mapFeedbackList(results);
+                
+                // Set up SWOT
+                this.setupSWOT();
+            },
 
-                let themeCount = {};
-                let keywordCount = {};
-                let dateCount = {};
-                let confidenceTotal = 0;
-                this.result['results'].forEach(item => {
-                    if(item['sentiment'] == 'positive'){
-                        count.positive ++
-                    }
-                    if(item['sentiment'] == 'negative'){
-                        count.negative ++
+            calculateSentimentCounts(results, total) {
+                const counts = {
+                    positive: 0,
+                    negative: 0,
+                    neutral: 0,
+                    total: total
+                };
+                
+                results.forEach(item => {
+                    const sentiment = item.sentiment?.toLowerCase();
+                    if (sentiment === 'positive') counts.positive++;
+                    else if (sentiment === 'negative') counts.negative++;
+                    else if (sentiment === 'neutral') counts.neutral++;
+                });
+                
+                return {
+                    ...counts,
+                    positivePercentage: ((counts.positive / total) * 100).toFixed(2),
+                    negativePercentage: ((counts.negative / total) * 100).toFixed(2),
+                    neutralPercentage: ((counts.neutral / total) * 100).toFixed(2)
+                };
+            },
+
+            calculateAverageSatisfaction(results, total) {
+                const satisfactionTotal = results.reduce((sum, item) => {
+                    return sum + (item.satisfaction || 0);
+                }, 0);
+                
+                return Math.round(satisfactionTotal / total);
+            },
+
+            calculateAverageConfidence(results, total) {
+                const confidenceTotal = results.reduce((sum, item) => {
+                    return sum + (item.confidence || 0);
+                }, 0);
+                
+                return Math.round(confidenceTotal / total);
+            },
+
+            calculateThemeFrequency(results) {
+                const themeCount = {};
+                
+                results.forEach(item => {
+                    const themes = Array.isArray(item.themes) ? item.themes : [];
+                    
+                    themes.forEach(theme => {
+                        themeCount[theme] = (themeCount[theme] || 0) + 1;
+                    });
+                });
+                
+                return Object.entries(themeCount)
+                    .map(([theme, count]) => ({ theme, count }))
+                    .sort((a, b) => b.count - a.count);
+            },
+                        
+            calculateKeywordFrequency(results) {
+                const keywordCount = {};
+                
+                results.forEach(item => {
+                    const keywords = Array.isArray(item.keywords) ? item.keywords : [];
+                    
+                    keywords.forEach(keyword => {
+                        keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+                    });
+                });
+                
+                return Object.entries(keywordCount)
+                    .map(([keyword, count]) => ({ keyword, count }))
+                    .sort((a, b) => b.count - a.count);
+            },
+
+            calculateSentimentByDate(results) {
+                const dateCount = {};
+                
+                results.forEach(item => {
+                    const date = item.date || 'Unknown';
+                    const sentiment = item.sentiment?.toLowerCase() || 'neutral';
+                    
+                    if (!dateCount[date]) {
+                        dateCount[date] = {
+                            positive: 0,
+                            negative: 0,
+                            neutral: 0
+                        };
                     }
                     
-                    satisfactionTotal += item.satisfaction;
-
-                    item.themes.forEach(theme => {
-                        if (!themeCount[theme]) {
-                            themeCount[theme] = 1;
-                        } else {
-                            themeCount[theme]++;
-                        }
-                    })
-
-                    item.keywords.forEach(keyword => {
-                        if (!keywordCount[keyword]) {
-                            keywordCount[keyword] = 1;
-                        } else {
-                            keywordCount[keyword]++;
-                        }
-                    })
-
-                    dateCount[item.date] = dateCount[item.date] || {};
-                    dateCount[item.date][item.sentiment] = (dateCount[item.date][item.sentiment] || 0) + 1;
-
-                    confidenceTotal += item.confidence;
+                    dateCount[date][sentiment] = (dateCount[date][sentiment] || 0) + 1;
                 });
-               this.dateCount = dateCount;
-
-                this.overallCount = {...count, positivePercentage : (count.positive / count.total) * 100, negativePercentage : (count.negative / count.total) * 100,};
-                //get overall satisfaction
-                this.overAllSatisfaction = satisfactionTotal / count.total;
-
-                //get themes ranking
-                const themeFrequency = Object.entries(themeCount).map(([theme, count]) => ({
-                    theme, count
-                })).sort((a, b) => b.count - a.count);
-
-                this.wordFrequency = themeFrequency;
-
-                //get keyword frequency
-                const keywordFrequency = Object.entries(keywordCount).map(([keyword, count]) => ({
-                    keyword, count
-                })).sort((a, b) => b.count - a.count);
-
-                this.wordFrequency = themeFrequency;
-                this.keywordFrequency = keywordFrequency;
-
-                //confidence ave
-                this.confidence = confidenceTotal / this.result.count;
-                //set up insights
-                this.insights = this.result['insights']
-
-                //populate feedback list
-                this.results = this.result['results'].map(item => ({
-                    date : item.date,
-                    type : item.sentiment,
-                    score : item.satisfaction,
-                    feedback : item.text,
-                    themes : item.themes,
-                    summary : item.summary,
-                    confidence : item.confidence
-                }))
-
-                //set up SWOT
-                this.strengths = this.result['swot'].strengths;
-                this.opportunities = this.result['swot'].opportunities;
-                this.weaknesses = this.result['swot'].weaknesses;
-                this.threats = this.result['swot'].threats;
-
+                
+                return dateCount;
             },
+
+            mapFeedbackList(results) {
+                return results.map(item => ({
+                    date: item.date || 'N/A',
+                    type: item.sentiment || 'neutral',
+                    score: item.satisfaction || 0,
+                    feedback: item.text || item.feedback || '',
+                    keywords: item.keywords || [],
+                    themes: item.themes || [],
+                    summary: item.summary || '',
+                    confidence: item.confidence || 0
+                }));
+            },
+
+            setupSWOT() {
+                const swot = this.result['swot'] || {};
+                
+                this.strengths = swot.strengths || [];
+                this.weaknesses = swot.weaknesses || [];
+                this.opportunities = swot.opportunities || [];
+                this.threats = swot.threats || [];
+            }
         },
         computed:{
             ...mapState(useUserStore, ['userData', 'companyData']),

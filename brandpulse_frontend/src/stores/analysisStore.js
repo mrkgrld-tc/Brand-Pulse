@@ -4,7 +4,7 @@ import { useNotifStore } from '../utilities/notifStore';
 
 export const useAnalysisStore = defineStore('useAnalysisStore', {
     state : () => ({
-
+        fetchedDashboard : false,
     }), 
     persist : {
         storage : sessionStorage,
@@ -58,6 +58,39 @@ export const useAnalysisStore = defineStore('useAnalysisStore', {
                     active : true,
                     title : 'Analysis Failed',
                     subtitle : `${error}, AI model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.`,
+                    icon : 'mdi-alert-circle-outline',
+                    autoClose : false,
+                });
+                return {
+                    success : false
+                };
+            }
+        },
+        async getdashBoardData(){
+            try {
+                const notifStore = useNotifStore();
+                notifStore.showNotif({
+                    active : true,
+                    title : 'Please Wait',
+                    subtitle : 'please be patient while AI is analyzing data',
+                    icon : 'mdi-loading',
+                    autoClose : false,
+                })
+                const res = await api.post('/getDashboardData');
+                notifStore.hideNotif();
+                if(res.data.success){
+                    this.fetchedDashboard = true;
+                    return res.data.data;
+                }else{
+                    return null;
+                }
+            } catch (error) {
+                const notifStore = useNotifStore();
+                notifStore.hideNotif();
+                notifStore.showNotif({
+                    active : true,
+                    title : 'Analysis Failed',
+                    subtitle : error,
                     icon : 'mdi-alert-circle-outline',
                     autoClose : false,
                 });

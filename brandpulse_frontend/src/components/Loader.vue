@@ -17,7 +17,7 @@ export default {
   name: 'LinearLoading',
   props: {
     progress: {
-      type: Number,
+      type: String,
       default: 0 // value between 0–100
     },
     color: {

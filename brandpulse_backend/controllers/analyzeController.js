@@ -2,7 +2,7 @@ const getDbManager  = require('../database/db_manager');
 const { analyzeFeedback, generateInsights, generateSWOT } = require('../services/geminiService');
 
 module.exports = {
-    analyzeFeedback : async (req, res) => {
+    analyzeFeedback1 : async (req, res) => {
         try {
             const feedback = req.body.feedbacks;
             const userid = req.body.userId;
@@ -40,8 +40,8 @@ module.exports = {
                     (user_id, company_id, date) 
                     VALUES (?, ?, NOW())
                 `
-                const analysisData = [userid, company.company.company_id];
-                const insertAnalysis = await DB.query('brand_pulse', analysisQuery, analysisData);
+                const analysisData = [userid, company.company.companyId];
+                insertAnalysis = await DB.query('brand_pulse', analysisQuery, analysisData);
             }else{
                 //save company to database
                 const companyQuery = `
@@ -133,7 +133,7 @@ module.exports = {
             });
         }
     },
-    analyzeFeedback1 : async (req, res) => {
+    analyzeFeedback : async (req, res) => {
         res.json({
             "success": true,
             "message": "Analysis complete",
@@ -631,5 +631,90 @@ module.exports = {
             },
             "count": 24
         })
+    },
+    getDashboardData : async (req, res) => {
+        try {
+            const DB = await getDbManager();
+            const raw = await DB.query('brand_pulse',`
+                    SELECT 
+                        analysis.analysis_id, 
+                        analysis.date as analysisDate,
+                        results.date, 
+                        results.feedback, 
+                        results.sentiment, 
+                        results.satisfaction,
+                        results.satisfaction, 
+                        results.confidence, 
+                        results.keywords, 
+                        results.themes, 
+                        results.summary, 
+                        insights.title, 
+                        insights.description, 
+                        insights.priority, 
+                        insights.sentiment_type, 
+                        insights.theme, 
+                        insights.expected_impact, 
+                        swot.strength, 
+                        swot.weaknesses, 
+                        swot.opportunities, 
+                        swot.threats 
+                    FROM analysis 
+                        INNER JOIN results 
+                            ON results.analysis_id = analysis.analysis_id 
+                        INNER JOIN insights 
+                            ON insights.analysis_id = analysis.analysis_id 
+                        INNER JOIN swot 
+                            ON swot.analysis_id = analysis.analysis_id 
+                    WHERE analysis.user_id = 36 AND analysis.company_id = 32
+                    ORDER BY analysis.analysis_id, results.date
+                `)
+                let data = {};
+                raw.forEach(item => {
+                    if(!data[item.analysis_id]){
+                        data[item.analysis_id] = {
+                            analysisDate : item.analysisDate.toDateString(),
+                            results : [],
+                            insights : [],
+                            swot : {},
+                        };
+                    }
+                    //SET RESULTS
+                    data[item.analysis_id].results.push({
+                        date : item.date,
+                        feedback : item.feedback,
+                        sentiment : item.sentiment,
+                        satisfaction : item.satisfaction,
+                        confidence : item.confidence,
+                        keywords : item.keywords,
+                        themes : item.themes,
+                        summary : item.summary,
+                    })
+                    //SET INSIGHTS
+                    data[item.analysis_id].insights.push({
+                        title : item.title,
+                        description : item.description,
+                        priority : item.priority,
+                        sentiment_type : item.sentiment_type,
+                        theme : item.theme,
+                        expected_impact : item.expected_impact,
+                    })
+                    //SET UP SWOT
+                    data[item.analysis_id].swot.strength = item.strength;
+                    data[item.analysis_id].swot.weaknesses = item.weaknesses;
+                    data[item.analysis_id].swot.opportunities = item.opportunities;
+                    data[item.analysis_id].swot.threats = item.threats;
+                })
+                res.json({
+                    success : true,
+                    data : data,
+                })
+        } catch (error) {
+            console.error('Analysis endpoint error:', error);
+        
+            res.status(500).json({
+                success: false,
+                message: error.message || 'Failed to analyze feedback'
+            });
+        }
     }
 }

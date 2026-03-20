@@ -14,6 +14,8 @@ router.post('/analyzeFeedback', analyzeController.analyzeFeedback);
 //Get Industries
 router.post('/getIndustries', userController.getIndustries);
 
+//Get Dashboard Data
+router.post('/getDashboardData', analyzeController.getDashboardData)
 //test
 router.get('/testt', ()=>{
     console.log('cusessss testt');
