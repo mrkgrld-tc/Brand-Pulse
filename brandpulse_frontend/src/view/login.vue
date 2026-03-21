@@ -5,8 +5,7 @@
         <v-card width="420" class="auth-card" elevation="0" rounded="xl">
           <!-- Header -->
             <div class="auth-header">
-                <img src="../assets/icons/corporate-culture.gif" alt="BrandPulse" class="auth-logo" />
-                <div class="auth-badge">BrandPulse</div>
+                <img src="../assets/logo.png" alt="BrandPulse" class="auth-logo" />
                 <h2 class="auth-title">{{ action === 'login' ? 'Welcome back' : 'Create account' }}</h2>
                 <p class="auth-subtitle">
                 {{ action === 'login'
@@ -405,8 +404,8 @@ export default {
 }
 
 .auth-logo {
-  width: 56px;
-  height: 56px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
 }
 

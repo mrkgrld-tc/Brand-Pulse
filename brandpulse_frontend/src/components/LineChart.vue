@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 350px;"> <!-- fixed height so chart doesn't look squished -->
+  <div style="height: 300px;"> <!-- fixed height so chart doesn't look squished -->
     <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
@@ -43,8 +43,8 @@ export default {
               backgroundColor: 'rgba(66, 185, 131, 0.7)',
               fill: true,
               borderRadius: 2,
-              barPercentage: isMobile ? 0.9 : 0.6,
-              categoryPercentage: isMobile ? 0.9 : 0.7
+              barPercentage: 1.0,
+              categoryPercentage: 1.0
             },
             {
               label: 'Negative',
@@ -53,8 +53,8 @@ export default {
               backgroundColor: 'rgba(237, 66, 69, 0.7)',
               fill: true,
               borderRadius: 2,
-              barPercentage: isMobile ? 0.9 : 0.6,
-              categoryPercentage: isMobile ? 0.9 : 0.7
+              barPercentage: 1.0,
+              categoryPercentage: 1.0
             }
           ]
         },

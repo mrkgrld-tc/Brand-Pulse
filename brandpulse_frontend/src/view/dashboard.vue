@@ -109,7 +109,13 @@
                 <v-card style="border-left: 4px solid green; height: 100%">
                     <v-card-title class="mt-2"><p>Strength</p></v-card-title>
                     <v-card-text>
-                        <p class="swot-text" v-for="item in strengths">-{{ item }}</p>
+                        <v-table class="rounded-lg">
+                            <tbody>
+                                <tr v-for="item in strengths">
+                                    <td>{{ item }}</td>
+                                </tr>
+                            </tbody>
+                        </v-table>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -117,7 +123,13 @@
                 <v-card style="border-left: 4px solid orange; height: 100%">
                     <v-card-title class="mt-2"><p>Weaknesses</p></v-card-title>
                     <v-card-text>
-                        <p class="swot-text" v-for="item in weaknesses">-{{ item }}</p>
+                        <v-table class="rounded-lg">
+                            <tbody>
+                                <tr v-for="item in weaknesses">
+                                    <td>{{ item }}</td>
+                                </tr>
+                            </tbody>
+                        </v-table>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -125,7 +137,13 @@
                 <v-card style="border-left: 4px solid blue; height: 100%">
                     <v-card-title class="mt-2"><p>Opportunities</p></v-card-title>
                     <v-card-text>
-                        <p class="swot-text" v-for="item in opportunities">-{{ item }}</p>
+                        <v-table class="rounded-lg">
+                            <tbody>
+                                <tr v-for="item in opportunities">
+                                    <td>{{ item }}</td>
+                                </tr>
+                            </tbody>
+                        </v-table>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -133,7 +151,13 @@
                 <v-card style="border-left: 4px solid red; height: 100%">
                     <v-card-title class="mt-2"><p>Threats</p></v-card-title>
                     <v-card-text>
-                        <p class="swot-text" v-for="item in threats">-{{ item }}</p>
+                        <v-table class="rounded-lg">
+                            <tbody>
+                                <tr v-for="item in threats">
+                                    <td>{{ item }}</td>
+                                </tr>
+                            </tbody>
+                        </v-table>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -351,10 +375,10 @@ import { mapActions, mapState } from 'pinia';
         font-size: clamp(0.5rem, 1vw, 1rem)!important;
     }
     .swot-text {
-        font-size: clamp(1rem, 1.1vw, 1.05rem) !important; /* slightly larger */
-        line-height: 1.5;                                  /* more breathing room */
-        word-spacing: 1px;                                 /* keep spacing subtle */
-        font-weight: 400 !important;                       /* normal weight for clarity */
+        font-size: clamp(1rem, 1.1vw, 1.05rem) !important; 
+        line-height: 1.5;                                  
+        word-spacing: 1px;                                 
+        font-weight: 400 !important;                       
     }
 
 </style>

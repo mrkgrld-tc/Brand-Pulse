@@ -1,47 +1,75 @@
 <template>
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero__content">
-        <div class="badge">AI-Powered Brand Intelligence</div>
-        <h1 class="hero__title">
-            Stop Guessing.<br />
-            <span class="gradient-text">Start Knowing.</span>
-        </h1>
-        <p class="hero__subtitle">
-            BrandPulse analyzes customer sentiment, tracks trends, and compares
-            competitors — so you can make smarter decisions faster.
-        </p>
-        <div class="hero__actions">
-            <v-btn to="/login" append-icon="mdi-arrow-top-right" color="primary" size="small" rounded="lg">
-              Get Started
-            </v-btn>
-            <v-btn @click="scrollToFeatures" size="small" rounded="lg" variant="tonal">
-              See How It Works
-            </v-btn>
-        </div>
+    <section>
+    <v-container fluid class="hero d-flex">
+        <v-row dense>
+          <v-col cols="12" md="6" lg="8" class="d-flex align-center">
+            <div class="hero__content">
+            <div class="d-flex align-center flex-row-reverse">
+              <div class="hero__image-wrapper">
+              <div class="hero__image-glow" />
+              <img src="../assets/logo.png" alt="AI managing business" class="hero__image" />
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="hero__title">
+                    Feel the Pulse.<br />
+                    <span class="gradient-text">Grow you Brand.</span>
+                </h1>
+                <div class="d-flex ga-2 align-center">
+                  <div class="badge">Brand Pulse</div>
+                  <p>Powered by AI</p>
+                </div>
+              </div>
+            </div>
+            <p class="hero__subtitle">
+                BrandPulse analyzes customer sentiment, tracks trends, and compares
+                competitors — so you can make smarter decisions faster.
+            </p>
+            <div class="hero__actions">
+                <v-btn to="/login" append-icon="mdi-arrow-top-right" color="primary" size="small" rounded="lg">
+                  Get Started
+                </v-btn>
+                <v-btn @click="scrollToFeatures" size="small" rounded="lg" variant="tonal">
+                  See How It Works
+                </v-btn>
+            </div>
 
-        <div class="hero__stats">
-            <div class="hero__stat">
-            <span class="hero__stat-value">10k+</span>
-            <span class="hero__stat-label">Brands Tracked</span>
+            <div class="hero__stats w-100">
+                <div class="hero__stat">
+                <span class="hero__stat-value">10k+</span>
+                <span class="hero__stat-label">Brands Tracked</span>
+                </div>
+                <div class="hero__stat-divider" />
+                <div class="hero__stat">
+                <span class="hero__stat-value">98%</span>
+                <span class="hero__stat-label">Accuracy Rate</span>
+                </div>
+                <div class="hero__stat-divider" />
+                <div class="hero__stat">
+                <span class="hero__stat-value">2x</span>
+                <span class="hero__stat-label">Faster Decisions</span>
+                </div>
             </div>
-            <div class="hero__stat-divider" />
-            <div class="hero__stat">
-            <span class="hero__stat-value">98%</span>
-            <span class="hero__stat-label">Accuracy Rate</span>
             </div>
-            <div class="hero__stat-divider" />
-            <div class="hero__stat">
-            <span class="hero__stat-value">2x</span>
-            <span class="hero__stat-label">Faster Decisions</span>
+          </v-col>
+          <v-col class="d-flex align-center">
+            <div class="hero__features flex-grow-1">
+                <div class="hero__feature">
+                    <v-icon color="primary" size="20">mdi-chart-line</v-icon>
+                    <span>Real-time Sentiment Analysis</span>
+                </div>
+                <div class="hero__feature">
+                    <v-icon color="primary" size="20">mdi-compare</v-icon>
+                    <span>Competitor Benchmarking</span>
+                </div>
+                <div class="hero__feature">
+                    <v-icon color="primary" size="20">mdi-lightbulb-on</v-icon>
+                    <span>AI-Powered Insights</span>
+                </div>
             </div>
-        </div>
-        </div>
-
-        <div class="hero__image-wrapper">
-        <div class="hero__image-glow" />
-        <img src="../assets/robot.jpeg" alt="AI managing business" class="hero__image" />
-        </div>
+          </v-col>
+        </v-row>
+    </v-container>
     </section>
 
   <!-- Features Section -->
@@ -401,13 +429,8 @@ export default {
 
 /* ── Hero ─────────────────────────────────────────── */
 .hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 48px;
   min-height: 100vh;
   padding: 80px 8vw;
-  box-sizing: border-box;
 }
 
 .hero__content {
@@ -489,7 +512,7 @@ export default {
   background: radial-gradient(
     circle at center,
     rgba(var(--v-theme-primary), 0.2) 0%,
-    transparent 65%
+    transparent 90%
   );
   filter: blur(50px);
 }
@@ -497,7 +520,7 @@ export default {
 .hero__image {
   position: relative;
   width: 100%;
-  max-width: 480px;
+  max-width: 150px;
   border-radius: 24px;
   object-fit: cover;
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.45);
@@ -862,5 +885,30 @@ export default {
   .hero__stat-value {
     font-size: 1.2rem;
   }
+}
+/* Feature Highlights */
+.hero__features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.hero__feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(var(--v-theme-primary), 0.05);
+  border: 1px solid rgba(var(--v-theme-primary), 0.15);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.hero__feature:hover {
+  background: rgba(var(--v-theme-primary), 0.1);
+  border-color: rgba(var(--v-theme-primary), 0.3);
+  transform: translateX(8px);
 }
 </style>  
