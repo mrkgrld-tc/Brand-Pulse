@@ -15,154 +15,29 @@
                     </div>
                 </div>
             </v-col>
-            <v-col cols="6" sm="6" md="3" lg="3">
-                <v-card class="d-flex">
-                    <v-card-text>
-                        <v-card-subtitle>Total</v-card-subtitle>
-                        <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
-                            <p class="text-info">{{ overallCount?.total }}</p>
-                        </v-card-title>
-                        <v-chip size="small" class="float-right">Confidence Ave: {{ overallCount?.confidenceAvg }}%</v-chip>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="6" sm="6" md="3" lg="3">
-                <v-card class="d-flex">
-                    <v-card-text>
-                        <v-card-subtitle>Positive</v-card-subtitle>
-                        <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
-                            <p class="text-success">{{ overallCount?.positive }}</p>
-                        </v-card-title>
-                        <v-chip size="small" class="float-right">{{overallCount?.positivePercentage}}%</v-chip>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="6" sm="6" md="3" lg="3">
-                <v-card class="d-flex">
-                    <v-card-text>
-                        <v-card-subtitle>Negative</v-card-subtitle>
-                        <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
-                            <p class="text-error">{{ overallCount?.negative }}</p>
-                        </v-card-title>
-                        <v-chip size="small" class="float-right">{{overallCount?.negativePercentage}}%</v-chip>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="6" sm="6" md="3" lg="3">
-                <v-card class="d-flex">
-                    <v-card-text>
-                        <v-card-subtitle>Overall Satisfaction</v-card-subtitle>
-                        <v-card-title class="d-flex justify-space-between align-center" style="font-size:2rem">
-                            <p class="text-warning">{{overallCount?.satisfaction}}</p>
-                        </v-card-title>
-                        <v-chip 
-                            size="small" 
-                            class="float-right"
-                            :color="overallCount?.satisfaction > 80 ? 'success' : 
-                            overallCount?.satisfaction > 60 ? 'warning' : 'error'"
-                            :text="overallCount?.satisfaction > 80 ? 'High' : 
-                            overallCount?.satisfaction > 60 ? 'Average' : 'Low'"
-                        ></v-chip>
-                    </v-card-text>
-                </v-card>
-            </v-col>
+            
+            <SummaryCards :overallCount="overallCount"/>
 
-            <v-col cols="12">
-                <v-card>
-                    <v-card-title><p>Sentiment Distribution</p></v-card-title>
-                    <v-card-text>
-                        <v-row dense>
-                            <v-col cols="12" sm="12" md="6" lg="6">
-                                <v-list-subtitle class="d-flex ga-2">
-                                    <v-icon color="green">mdi-trending-up</v-icon>
-                                    <p>Positive</p>
-                                </v-list-subtitle>
-                                <Loader color="green" :progress="overallCount?.positivePercentage"></Loader>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="6" lg="6">
-                                <v-list-subtitle class="d-flex ga-2">
-                                    <v-icon color="red">mdi-trending-down</v-icon>
-                                    <p>Negative</p>
-                                </v-list-subtitle>
-                                <Loader color="red" :progress="overallCount?.negativePercentage"></Loader>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-                </v-card>
-            </v-col>
+            <SentimentDistrubution :overallCount="overallCount"/>
 
+            <SentimentOvertime :dateCount="dateCount"/>
+
+            <SwotDashboard
+                :strengths="strengths"
+                :weaknesses="weaknesses"
+                :opportunities="opportunities"
+                :threats="threats"
+            />
+
+            <v-col cols=12>
+                <div v-if="!insights"></div>
+                <ActionableInsightsDashboard v-else :insights="insights"/>
+            </v-col>
+            
             <v-col cols="12">
-                <v-card>
-                    <v-card-title><p>Sentiments Overtime</p></v-card-title>
-                    <v-card-text v-if="loading || !dateCount">
-                        Loading...
-                    </v-card-text>
-                    <LineChart 
-                        v-else
-                        :date="Object.keys(dateCount)" 
-                        :positive="Object.entries(dateCount).map(([key, value]) => (value.positive))"
-                        :negative="Object.entries(dateCount).map(([key, value]) => (value.negative))"
-                    />
-                </v-card>
-            </v-col>
-            <v-col cols="12" sm="6" md="6" lg="6">
-                <v-card style="border-left: 4px solid green; height: 100%">
-                    <v-card-title class="mt-2"><p>Strength</p></v-card-title>
-                    <v-card-text>
-                        <v-table class="rounded-lg">
-                            <tbody>
-                                <tr v-for="item in strengths">
-                                    <td>{{ item }}</td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="12" sm="6" md="6" lg="6">
-                <v-card style="border-left: 4px solid orange; height: 100%">
-                    <v-card-title class="mt-2"><p>Weaknesses</p></v-card-title>
-                    <v-card-text>
-                        <v-table class="rounded-lg">
-                            <tbody>
-                                <tr v-for="item in weaknesses">
-                                    <td>{{ item }}</td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="12" sm="6" md="6" lg="6">
-                <v-card style="border-left: 4px solid blue; height: 100%">
-                    <v-card-title class="mt-2"><p>Opportunities</p></v-card-title>
-                    <v-card-text>
-                        <v-table class="rounded-lg">
-                            <tbody>
-                                <tr v-for="item in opportunities">
-                                    <td>{{ item }}</td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="12" sm="6" md="6" lg="6">
-                <v-card style="border-left: 4px solid red; height: 100%">
-                    <v-card-title class="mt-2"><p>Threats</p></v-card-title>
-                    <v-card-text>
-                        <v-table class="rounded-lg">
-                            <tbody>
-                                <tr v-for="item in threats">
-                                    <td>{{ item }}</td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col cols="12">
+                <div v-if="!wordFrequency && !keywordFrequency">Loading</div>
                 <wordChart
+                    v-else
                     :word-frequency="wordFrequency"
                     :keyword-frequency="keywordFrequency"
                     @search-keyword="handleSearchKeyword"
@@ -174,11 +49,12 @@
 
 <script>
     import { useAnalysisStore } from '@/stores/analysisStore';
-    import LineChart from '@/components/LineChart.vue';
-    import BarChart from '@/components/BarChart.vue';
-    import GaugeChart from '@/components/GaugeChart.vue';
-    import RadarChart from '@/components/RadarChart.vue';
+    import SummaryCards from '@/components/dashboard/SummaryCards.vue';
+    import SentimentDistrubution from '@/components/dashboard/SentimentDistrubution.vue';
+    import SentimentOvertime from '@/components/dashboard/SentimentOvertime.vue';
+    import SwotDashboard from '@/components/dashboard/SwotDashboard.vue';
     import wordChart from '@/components/wordChart.vue';
+    import ActionableInsightsDashboard from '@/components/dashboard/ActionableInsightsDashboard.vue';
 import { mapActions, mapState } from 'pinia';
     export default {
         data(){
@@ -193,14 +69,18 @@ import { mapActions, mapState } from 'pinia';
                 opportunities: [],
                 weaknesses: [],
                 threats : [],
+                wordFrequency : null,
+                keywordFrequency : null,
+                insights : null,
             }
         },
-        components:{
-            LineChart,
-            BarChart,
-            GaugeChart,
-            RadarChart,
-            wordChart
+        components:{    
+            wordChart,
+            SummaryCards,
+            SentimentDistrubution,
+            SentimentOvertime,
+            SwotDashboard,
+            ActionableInsightsDashboard
         },
         methods:{
             ...mapActions(useAnalysisStore, ['getdashBoardData']),
@@ -212,12 +92,12 @@ import { mapActions, mapState } from 'pinia';
                 // Calculate all metrics
                 this.overallCount = this.calculateSentimentCounts(rawData);
                 // this.confidence = this.calculateAverageConfidence(results, count);
-                // this.wordFrequency = this.calculateThemeFrequency(results);
-                // this.keywordFrequency = this.calculateKeywordFrequency(results);
+                this.wordFrequency = this.calculateThemeFrequency(rawData);
+                this.keywordFrequency = this.calculateKeywordFrequency(rawData);
                 this.dateCount = this.calculateSentimentByDate(rawData);
                 
                 // // Set up insights
-                // this.insights = this.result['insights'];
+                this.insights = this.setUpInsights(rawData);
                 
                 // // Populate feedback list
                 // this.results = this.mapFeedbackList(results);
@@ -275,15 +155,15 @@ import { mapActions, mapState } from 'pinia';
 
             calculateThemeFrequency(results) {
                 const themeCount = {};
-                
-                results.forEach(item => {
-                    const themes = Array.isArray(item.themes) ? item.themes : [];
-                    
-                    themes.forEach(theme => {
-                        themeCount[theme] = (themeCount[theme] || 0) + 1;
+                Object.entries(results).forEach(([key, value]) => {
+                    value['results'].forEach(item => {
+                        const themes = item.themes ? JSON.parse(item.themes) : [];
+                        
+                        themes.forEach(theme => {
+                            themeCount[theme] = (themeCount[theme] || 0) + 1;
+                        });
                     });
-                });
-                
+                })
                 return Object.entries(themeCount)
                     .map(([theme, count]) => ({ theme, count }))
                     .sort((a, b) => b.count - a.count);
@@ -291,14 +171,14 @@ import { mapActions, mapState } from 'pinia';
                         
             calculateKeywordFrequency(results) {
                 const keywordCount = {};
-                
-                results.forEach(item => {
-                    const keywords = Array.isArray(item.keywords) ? item.keywords : [];
-                    
-                    keywords.forEach(keyword => {
-                        keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+                Object.entries(results).forEach(([key, value]) => {
+                    value['results'].forEach(item => {
+                        const keywords = item.keywords ? JSON.parse(item.keywords) : [];
+                        keywords.forEach(keyword => {
+                            keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+                        });
                     });
-                });
+                })
                 
                 return Object.entries(keywordCount)
                     .map(([keyword, count]) => ({ keyword, count }))
@@ -339,7 +219,16 @@ import { mapActions, mapState } from 'pinia';
                     confidence: item.confidence || 0
                 }));
             },
+            setUpInsights(results){
+                const temp = [];
+                Object.entries(results).forEach(([key, value]) => {
+                    value['insights'].forEach(item => {
+                        temp.push(item);
+                    })
+                })
 
+                return temp;
+            },
             setupSWOT(rawData) {
                 Object.entries(rawData).forEach(([key, value]) => {
                     const swot = value['swot'] || {};

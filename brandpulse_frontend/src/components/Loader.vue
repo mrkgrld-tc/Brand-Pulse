@@ -18,7 +18,7 @@ export default {
   props: {
     progress: {
       type: String,
-      default: 0 // value between 0–100
+      default: '0' // value between 0–100
     },
     color: {
       type: String,

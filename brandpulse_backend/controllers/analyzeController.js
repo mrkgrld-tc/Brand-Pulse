@@ -635,6 +635,22 @@ module.exports = {
     getDashboardData : async (req, res) => {
         try {
             const DB = await getDbManager();
+            const raw2 = await DB.query('brand_pulse', `
+                    SELECT 
+                        analysis.analysis_id, 
+                        analysis.date as analysisDate,
+                        insights.title, 
+                        insights.description, 
+                        insights.priority, 
+                        insights.sentiment_type, 
+                        insights.theme, 
+                        insights.expected_impact
+                    FROM analysis 
+                        INNER JOIN insights 
+                            ON insights.analysis_id = analysis.analysis_id 
+                    WHERE analysis.user_id = 36 AND analysis.company_id = 32
+                    ORDER BY analysis.analysis_id
+                `)
             const raw = await DB.query('brand_pulse',`
                     SELECT 
                         analysis.analysis_id, 
@@ -647,13 +663,7 @@ module.exports = {
                         results.confidence, 
                         results.keywords, 
                         results.themes, 
-                        results.summary, 
-                        insights.title, 
-                        insights.description, 
-                        insights.priority, 
-                        insights.sentiment_type, 
-                        insights.theme, 
-                        insights.expected_impact, 
+                        results.summary,
                         swot.strength, 
                         swot.weaknesses, 
                         swot.opportunities, 
@@ -674,7 +684,18 @@ module.exports = {
                         data[item.analysis_id] = {
                             analysisDate : item.analysisDate.toDateString(),
                             results : [],
-                            insights : [],
+                            insights : raw2.filter(raw => {
+                                if(raw.analysis_id == item.analysis_id){
+                                    return {
+                                        ratitle : raw.title,
+                                        description : raw.description,
+                                        priority : raw.priority,
+                                        sentiment_type : raw.sentiment_type,
+                                        theme : raw.theme,
+                                        expected_impact : raw.expected_impact,
+                                    };
+                                }
+                            }),
                             swot : {},
                         };
                     }
@@ -689,15 +710,7 @@ module.exports = {
                         themes : item.themes,
                         summary : item.summary,
                     })
-                    //SET INSIGHTS
-                    data[item.analysis_id].insights.push({
-                        title : item.title,
-                        description : item.description,
-                        priority : item.priority,
-                        sentiment_type : item.sentiment_type,
-                        theme : item.theme,
-                        expected_impact : item.expected_impact,
-                    })
+                   
                     //SET UP SWOT
                     data[item.analysis_id].swot.strength = item.strength;
                     data[item.analysis_id].swot.weaknesses = item.weaknesses;
