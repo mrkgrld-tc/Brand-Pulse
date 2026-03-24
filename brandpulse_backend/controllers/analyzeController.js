@@ -634,6 +634,8 @@ module.exports = {
     },
     getDashboardData : async (req, res) => {
         try {
+            const userId = req.body.userId;
+            const companyId = req.body.companyId;
             const DB = await getDbManager();
             const raw2 = await DB.query('brand_pulse', `
                     SELECT 
@@ -648,7 +650,7 @@ module.exports = {
                     FROM analysis 
                         INNER JOIN insights 
                             ON insights.analysis_id = analysis.analysis_id 
-                    WHERE analysis.user_id = 36 AND analysis.company_id = 32
+                    WHERE analysis.user_id = ${userId} AND analysis.company_id = ${userId}
                     ORDER BY analysis.analysis_id
                 `)
             const raw = await DB.query('brand_pulse',`
@@ -675,7 +677,7 @@ module.exports = {
                             ON insights.analysis_id = analysis.analysis_id 
                         INNER JOIN swot 
                             ON swot.analysis_id = analysis.analysis_id 
-                    WHERE analysis.user_id = 36 AND analysis.company_id = 32
+                    WHERE analysis.user_id = ${userId} AND analysis.company_id = ${userId}
                     ORDER BY analysis.analysis_id, results.date
                 `)
                 let data = {};

@@ -1,26 +1,32 @@
 <template>
     <v-container>
-        <v-row class="mx-3" dense>
+        <v-system-bar v-if="Object.keys(rawDashboardData).length == 0" class="bg-red d-flex justify-center">
+            <p>Go to Analyze page to start analyzing feedbacks</p>
+        </v-system-bar>
+        <v-row v-else class="mx-3" dense>
             <v-col cols="12">
                 <div class="d-flex justify-space-between align-center">
                     <h3>Dashboard</h3>
-                    <div class="d-flex ga-2">
-                        <v-btn id="analysisMenuActivator" append-icon="mdi-chevron-down">All</v-btn>
-                        <v-menu persistent activator="#analysisMenuActivator" open-on-hover>
-                            <v-card>
-                                <v-radio label="Analysis #09232" value="value"></v-radio>
-                            </v-card>
-                        </v-menu>
-                        <v-btn>Analyze</v-btn>
+                    <div class="d-flex align-center flex-grow-1 justify-end ga-4">
+                        <v-select 
+                            max-width="300px"
+                            density="compact" 
+                            variant="outlined"
+                            hide-details
+                            label="Filter"
+                            v-if="analysisList"
+                            v-model="filter"
+                            :items="analysisList"
+                            item-title="text"
+                            item-value="value"
+                        ></v-select>
+                        <v-btn to="/analyze">Analyze</v-btn>
                     </div>
                 </div>
             </v-col>
-            
             <SummaryCards :overallCount="overallCount"/>
 
             <SentimentDistrubution :overallCount="overallCount"/>
-
-            <SentimentOvertime :dateCount="dateCount"/>
 
             <SwotDashboard
                 :strengths="strengths"
@@ -28,6 +34,9 @@
                 :opportunities="opportunities"
                 :threats="threats"
             />
+
+            <SentimentOvertime :dateCount="dateCount"/>
+
 
             <v-col cols=12>
                 <div v-if="!insights"></div>
@@ -49,19 +58,19 @@
 
 <script>
     import { useAnalysisStore } from '@/stores/analysisStore';
+    import { useUserStore } from '@/stores/userStore';
     import SummaryCards from '@/components/dashboard/SummaryCards.vue';
     import SentimentDistrubution from '@/components/dashboard/SentimentDistrubution.vue';
     import SentimentOvertime from '@/components/dashboard/SentimentOvertime.vue';
     import SwotDashboard from '@/components/dashboard/SwotDashboard.vue';
     import wordChart from '@/components/wordChart.vue';
     import ActionableInsightsDashboard from '@/components/dashboard/ActionableInsightsDashboard.vue';
-import { mapActions, mapState } from 'pinia';
+    import { mapActions, mapState } from 'pinia';
     export default {
         data(){
             return{
                 demoPrompt : true,
-                dashboardData : null,
-                rawDashboardData : null,
+                rawDashboardData : {},
                 overallCount : null,
                 overAllSatisfaction : null,
                 dateCount : null,
@@ -72,6 +81,7 @@ import { mapActions, mapState } from 'pinia';
                 wordFrequency : null,
                 keywordFrequency : null,
                 insights : null,
+                filter : 0,
             }
         },
         components:{    
@@ -85,10 +95,14 @@ import { mapActions, mapState } from 'pinia';
         methods:{
             ...mapActions(useAnalysisStore, ['getdashBoardData']),
             async handleGetDashBoarData(){
-                this.rawDashboardData = await this.getdashBoardData();  
+                this.rawDashboardData = await this.getdashBoardData(this.userData.userId, this.companyData.companyId);  
                 this.processData(this.rawDashboardData)
             },
             async processData(rawData) {
+                this.strengths = [];
+                this.weaknesses = [];
+                this.opportunities = [];
+                this.threats = [];
                 // Calculate all metrics
                 this.overallCount = this.calculateSentimentCounts(rawData);
                 // this.confidence = this.calculateAverageConfidence(results, count);
@@ -248,8 +262,37 @@ import { mapActions, mapState } from 'pinia';
             }
         },
         computed : {
-            ...mapState(useAnalysisStore, ['fetchedDashboard'])
+            ...mapState(useAnalysisStore, ['fetchedDashboard']),
+            ...mapState(useUserStore, ['userData', 'companyData']),
+            analysisList(){
+                if(this.rawDashboardData){
+                    const temp = Object.entries(this.rawDashboardData).map(([key, value]) => {
+                        return{
+                            value : key,
+                            text : `#${key}-${value.analysisDate}`
+                        }
+                    })
+                    temp.unshift({
+                        value : 0,
+                        text : 'All',
+                    })
+                    return temp;
+                }
+                return null;
+            },
         },
+        watch : {
+            filter(newVal){
+                if(newVal == 0){
+                    this.processData(this.rawDashboardData)
+                }else{
+                    const temp = {};
+                    temp[newVal] = {...this.rawDashboardData[newVal]};
+                    console.log(temp)
+                    this.processData(temp);
+                }
+            }
+        },  
         async mounted(){
             this.handleGetDashBoarData();
         }

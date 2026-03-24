@@ -66,17 +66,17 @@ export const useAnalysisStore = defineStore('useAnalysisStore', {
                 };
             }
         },
-        async getdashBoardData(){
+        async getdashBoardData(userId, companyId){
             try {
                 const notifStore = useNotifStore();
                 notifStore.showNotif({
                     active : true,
                     title : 'Please Wait',
-                    subtitle : 'please be patient while AI is analyzing data',
+                    subtitle : 'Please wait while we fetching your data',
                     icon : 'mdi-loading',
                     autoClose : false,
                 })
-                const res = await api.post('/getDashboardData');
+                const res = await api.post('/getDashboardData', {userId, companyId});
                 notifStore.hideNotif();
                 if(res.data.success){
                     this.fetchedDashboard = true;
