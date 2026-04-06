@@ -16,6 +16,10 @@ router.post('/getIndustries', userController.getIndustries);
 
 //Get Dashboard Data
 router.post('/getDashboardData', analyzeController.getDashboardData)
+
+//Get competitors data
+router.post('/getCompetitorsData', analyzeController.getCompetitorsData)
+
 //test
 router.get('/testt', ()=>{
     console.log('cusessss testt');

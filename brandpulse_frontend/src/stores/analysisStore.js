@@ -78,6 +78,7 @@ export const useAnalysisStore = defineStore('useAnalysisStore', {
                 })
                 const res = await api.post('/getDashboardData', {userId, companyId});
                 notifStore.hideNotif();
+                this.fetchedDashboard = true;
                 if(res.data.success){
                     this.fetchedDashboard = true;
                     return res.data.data;

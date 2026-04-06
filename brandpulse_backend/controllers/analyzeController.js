@@ -2,7 +2,7 @@ const getDbManager  = require('../database/db_manager');
 const { analyzeFeedback, generateInsights, generateSWOT } = require('../services/geminiService');
 
 module.exports = {
-    analyzeFeedback1 : async (req, res) => {
+    analyzeFeedback : async (req, res) => {
         try {
             const feedback = req.body.feedbacks;
             const userid = req.body.userId;
@@ -133,7 +133,7 @@ module.exports = {
             });
         }
     },
-    analyzeFeedback : async (req, res) => {
+    analyzeFeedback1 : async (req, res) => {
         res.json({
             "success": true,
             "message": "Analysis complete",
@@ -650,7 +650,7 @@ module.exports = {
                     FROM analysis 
                         INNER JOIN insights 
                             ON insights.analysis_id = analysis.analysis_id 
-                    WHERE analysis.user_id = ${userId} AND analysis.company_id = ${userId}
+                    WHERE analysis.user_id = ${userId} AND analysis.company_id = ${companyId}
                     ORDER BY analysis.analysis_id
                 `)
             const raw = await DB.query('brand_pulse',`
@@ -677,7 +677,7 @@ module.exports = {
                             ON insights.analysis_id = analysis.analysis_id 
                         INNER JOIN swot 
                             ON swot.analysis_id = analysis.analysis_id 
-                    WHERE analysis.user_id = ${userId} AND analysis.company_id = ${userId}
+                    WHERE analysis.user_id = ${userId} AND analysis.company_id = ${companyId}
                     ORDER BY analysis.analysis_id, results.date
                 `)
                 let data = {};
@@ -724,11 +724,137 @@ module.exports = {
                     data : data,
                 })
         } catch (error) {
-            console.error('Analysis endpoint error:', error);
+            console.error('Dash Board Extraction Error:', error);
         
             res.status(500).json({
                 success: false,
-                message: error.message || 'Failed to analyze feedback'
+                message: error.message || 'Failed to Fetched Dashboard Data'
+            });
+        }
+    },
+    getCompetitorsData : async (req, res) => {
+        try {
+            const DB = await getDbManager();
+            const analysisQuery = `
+                SELECT * FROM analysis AS ana 
+                    INNER JOIN company AS comp 
+                        ON ana.company_id = comp.company_id
+                WHERE comp.company_id != ?
+                AND comp.industry_id = ?
+            `;
+            const analysisData = [req.body.companyId, req.body.industryId];
+            const analysisRaw = await DB.query('brand_pulse', analysisQuery, analysisData);
+            const analysis = analysisRaw.map(item => {
+                return{
+                    id : item.analysis_id,
+                    company : item.name,
+                    companyId : item.company_id,
+                    date : item.date
+                }
+            })
+
+            let results = [];
+            let insights = [];
+            let swot = [];
+
+            if(analysis.length > 0){
+                const resultQuery = `
+                    SELECT * FROM analysis AS ana 
+                        INNER JOIN results as res
+                            ON res.analysis_id = ana.analysis_id
+                    WHERE ana.analysis_id IN (${analysis.map(item => item.id).join(',')})
+                `;
+                results = await DB.query('brand_pulse', resultQuery);
+
+                const swotQuery = `
+                    SELECT * FROM analysis AS ana 
+                        INNER JOIN swot
+                            ON swot.analysis_id = ana.analysis_id
+                    WHERE ana.analysis_id IN (${analysis.map(item => item.id).join(',')})
+                `
+                swot = await DB.query('brand_pulse',swotQuery);
+
+                const insightsQuery = `
+                    SELECT * FROM analysis AS ana 
+                        INNER JOIN insights as ins
+                            ON ins.analysis_id = ana.analysis_id
+                    WHERE ana.analysis_id IN (${analysis.map(item => item.id).join(',')})
+                `
+                insights = await DB.query('brand_pulse', insightsQuery);
+            }
+
+            const resultsMap = {};
+            const insightsMap = {};
+            const swotsMap = {};
+
+            results.forEach(item => {
+                if(!resultsMap[item.company_id]){
+                    resultsMap[item.company_id] = [];
+                }
+
+                resultsMap[item.company_id].push({
+                    date : item.date,
+                    result_id : item.result_id,
+                    feedback : item.feedback,
+                    sentiment : item.sentiment,
+                    satisfaction : item.satisfaction,
+                    confidence : item.confidence,
+                    keywords : item.keywords,
+                    themes : item.themes,
+                    summary : item.summary,
+                })
+            })
+
+            insights.forEach(item => {
+                if(!insightsMap[item.company_id]){
+                    insightsMap[item.company_id] = []
+                }
+
+                insightsMap[item.company_id].push({
+                    insights_id :item.insights_id,
+                    title :item.title,
+                    description :item.description,
+                    priority :item.priority,
+                    sentiment_type :item.sentiment_type,
+                    theme :item.theme,
+                    expected_impact :item.expected_impact,
+                })
+            })
+
+            swot.forEach(item => {
+                if(!swotsMap[item.company_id]){
+                    swotsMap[item.company_id] = [];
+                }
+
+                swotsMap[item.company_id].push({
+                    swot_id : item.swot_id,
+                    strength : item.strength,
+                    weaknesses : item.weaknesses,
+                    opportunities : item.opportunities,
+                    threats : item.threats,
+                })
+            })
+
+            const groupedData = {};
+            analysis.forEach(item => {
+                if(!groupedData[item.companyId]) groupedData[item.companyId] = []
+                
+                groupedData[item.companyId] = {
+                    ...item,
+                    results : resultsMap[item.companyId],
+                    insight : insightsMap[item.companyId],
+                    swot : swotsMap[item.companyId]
+                }
+            })
+            res.status(200).json({
+                res : groupedData
+            })
+        } catch (error) {
+            console.error('Dash Board Extraction Error:', error);
+        
+            res.status(500).json({
+                success: false,
+                message: error.message || 'Failed to Fetched Competitors Data'
             });
         }
     }

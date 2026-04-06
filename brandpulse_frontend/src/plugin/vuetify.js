@@ -31,8 +31,9 @@ const vuetify = createVuetify({
         },
         VList : {
             style : [
-                {backgroundColor : 'rgba(14, 11, 18, 0.8)'}
-            ]
+                {backgroundColor : 'rgba(14, 11, 18, 0.8)'},
+            ],
+            class : 'rounded-lg',
         },
         VListItem : {
             style: [
@@ -52,6 +53,9 @@ const vuetify = createVuetify({
         },
         VIcon : {
             opacity : 0.5,
+        },
+        VTable : {
+            class : 'rounded-lg'
         }
     }
 })
