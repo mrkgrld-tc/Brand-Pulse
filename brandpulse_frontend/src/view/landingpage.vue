@@ -349,7 +349,6 @@ export default {
                     price: 7999,
                     popular: false,
                     cta: 'Contact Sales',
-                    to: '/contact',
                     features: [
                     'Unlimited analyses',
                     'Advanced analytics',

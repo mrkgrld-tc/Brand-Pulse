@@ -48,6 +48,10 @@ const vuetify = createVuetify({
             variant : 'outlined',
             density : 'compact'
         },
+        VSelect : {
+            variant : 'outlined',
+            density : 'compact'
+        },
         VCardTitle : {
             style: [{ fontSize: 'clamp(1rem, 1.5vw, 1.3rem)!important' }]
         },

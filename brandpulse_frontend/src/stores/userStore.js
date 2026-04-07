@@ -64,7 +64,7 @@ export const useUserStore = defineStore('userStore' , {
                         companyId: resUserData['company_id'],
                         companyName: resUserData['name'],
                         industryId: resUserData['industry_id'],
-                        // industry: resUserData['industry_id'],//Fixed auth return
+                        industry: resUserData['label'],//Fixed auth return
                     };
 
                     this.authentication = {

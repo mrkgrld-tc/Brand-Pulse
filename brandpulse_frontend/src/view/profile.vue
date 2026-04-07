@@ -73,13 +73,22 @@
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" lg="6" md="6" sm="12" class="pa-2">
-                                <v-text-field
+                                <!-- <v-text-field
                                     v-model="profileData.industry"
                                     prepend-inner-icon="mdi-treasure-chest-outline"
                                     hide-details
                                     label="Industry"
                                     :readonly="!editMode"
-                                ></v-text-field>
+                                ></v-text-field> -->
+                                <v-select
+                                    v-model="profileData.industry"
+                                    :items="industryList"
+                                    item-title="label"
+                                    item-value="industry_id"
+                                    label="Industry"
+                                    :readonly="!editMode"
+                                >
+                                </v-select>
                             </v-col>
                         </v-row>
                     </v-card-text>
@@ -354,6 +363,7 @@ import { useUserStore } from '@/stores/userStore';
 import { imageCompress } from '@/utilities/imageCompress';
 import { VFileUpload } from 'vuetify/labs/VFileUpload'
 import { useNotifStore } from '@/utilities/notifStore';
+import api from '@/plugin/axios';
     export default {
         data(){
             return{
@@ -361,7 +371,8 @@ import { useNotifStore } from '@/utilities/notifStore';
                 profileData : {},
                 editMode : false,
                 uploadAvatar : false,
-                imageData : null
+                imageData : null,
+                industryList : [],
             }
         },
         methods : {
@@ -405,6 +416,10 @@ import { useNotifStore } from '@/utilities/notifStore';
                     industry : this.profileData['industry'],
                 }
                 this.updateProfile(updateData);
+            },
+            async getIndustry(){
+                const res = await api.post('/getIndustries');
+                this.industryList = res.data.industries;
             }
         },
         computed : {
@@ -416,6 +431,7 @@ import { useNotifStore } from '@/utilities/notifStore';
                 ...this.userData, 
                 benchmarkingStatus : this.userData.benchmarkingStatus == 'public' ? true : false
             };
+            this.getIndustry();
         }, 
         components : {
             VFileUpload
