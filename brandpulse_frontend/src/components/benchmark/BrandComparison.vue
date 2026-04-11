@@ -248,7 +248,6 @@
                                         </v-list-item>
                                     </v-list>
                                 </v-col>
-
                                 <!-- Competitor Strengths -->
                                 <v-col cols="12" md="6">
                                     <h4 class="mb-3">
@@ -688,6 +687,7 @@ export default {
             const competitorId = this.competitor.companyId;
             const competitorRawData = this.benchStore.competitorsRawData[competitorId];
             
+            console.log('Processing competitor data for:', competitorRawData);
             if (!competitorRawData) {
                 console.error('Competitor data not found');
                 return;
@@ -720,12 +720,12 @@ export default {
             
             // Get competitor SWOT
             const swot = competitorRawData.swot || {};
-            this.competitorSWOT = {
-                strengths: swot.strength ? JSON.parse(swot.strength) : [],
-                weaknesses: swot.weaknesses ? JSON.parse(swot.weaknesses) : [],
-                opportunities: swot.opportunities ? JSON.parse(swot.opportunities) : [],
-                threats: swot.threats ? JSON.parse(swot.threats) : []
-            };
+            swot.forEach(item => {
+                this.competitorSWOT.strengths.push(...(item.strength ? JSON.parse(item.strength) : []));
+                this.competitorSWOT.weaknesses.push(...(item.weaknesses ? JSON.parse(item.weaknesses) : []));
+                this.competitorSWOT.opportunities.push(...(item.opportunities ? JSON.parse(item.opportunities) : []));
+                this.competitorSWOT.threats.push(...(item.threats ? JSON.parse(item.threats) : []));
+            })
         }
     },
     mounted() {

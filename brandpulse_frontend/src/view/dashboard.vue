@@ -35,8 +35,7 @@
                 :threats="threats"
             />
 
-            <SentimentOvertime :dateCount="dateCount"/>
-
+            <SentimentOvertime/>
 
             <v-col cols=12>
                 <div v-if="!insights"></div>

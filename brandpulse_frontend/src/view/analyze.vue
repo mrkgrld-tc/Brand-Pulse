@@ -327,7 +327,7 @@
                     <v-chip v-for="theme in feedbackDetaildata.themes" class="mr-1">{{ theme }}</v-chip>
 
                     <p class="mt-2">Sentiment: </p>
-                    <v-chip>{{ feedbackDetaildata.type }}</v-chip>
+                    <v-chip :color="colorLib[feedbackDetaildata.type]">{{ feedbackDetaildata.type }}</v-chip>
                     <p class="mt-2">Confidence Level:</p>
                     <v-chip>{{ feedbackDetaildata.confidence }}%</v-chip>
                 </v-card-text>

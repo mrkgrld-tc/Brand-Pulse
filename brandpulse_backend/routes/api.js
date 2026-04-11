@@ -20,6 +20,7 @@ router.post('/getDashboardData', analyzeController.getDashboardData)
 //Get competitors data
 router.post('/getCompetitorsData', analyzeController.getCompetitorsData)
 
+router.post('/changePassword', userController.changePassword)
 //test
 router.get('/testt', ()=>{
     console.log('cusessss testt');

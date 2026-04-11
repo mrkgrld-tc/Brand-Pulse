@@ -5,7 +5,7 @@
                 <p class="text-center">Notification</p>
                 <v-divider class="border-opacity-25"></v-divider>
                 <div class="d-flex flex-column align-center mt-2">
-                    <v-icon size="x-large">{{ icon }}</v-icon>
+                    <v-icon size="x-large" :class="icon === 'mdi-loading' ? 'rotate' : ''">{{ icon }}</v-icon>
                     <p>{{ title }}</p>
                     <p class="text-caption">{{ subtitle }}</p>
                 </div>
@@ -38,3 +38,18 @@
         }
     }
 </script>
+<style scope>
+.rotate {
+    display: inline-block; /* Required for some elements to rotate properly */
+    animation: rotation 2s linear infinite;
+  }
+
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

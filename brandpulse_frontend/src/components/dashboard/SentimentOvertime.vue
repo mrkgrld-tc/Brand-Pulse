@@ -5,11 +5,11 @@
             <v-card-text v-if="!dateCount">
                 Loading...
             </v-card-text>
-            <LineChart 
-                v-else
-                :date="Object.keys(dateCount)" 
-                :positive="Object.entries(dateCount).map(([key, value]) => (value.positive))"
-                :negative="Object.entries(dateCount).map(([key, value]) => (value.negative))"
+            <LineChart
+                v-if="dateCount"
+                :date="dates"
+                :positive="positiveData"
+                :negative="negativeData"
             />
         </v-card>
     </v-col>
@@ -17,13 +17,28 @@
 
 <script>
 import LineChart from '../LineChart.vue';
+import { useDashboardStore } from '@/stores/dashboardStore';
+import { mapState } from 'pinia';
     export default {
         components : {
             LineChart,
         },
         props : {
-            dateCount : { 
-                type : Object
+            // dateCount : { 
+            //     type : Object
+            // }
+        },
+        computed: {
+            ...mapState(useDashboardStore, ['dateCount']),
+
+            dates() {
+                return Object.keys(this.dateCount ?? {});
+            },
+            positiveData() {
+                return Object.values(this.dateCount ?? {}).map(v => v.positive);
+            },
+            negativeData() {
+                return Object.values(this.dateCount ?? {}).map(v => v.negative);
             }
         }
     }

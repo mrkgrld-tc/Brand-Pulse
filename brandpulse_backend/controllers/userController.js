@@ -180,6 +180,46 @@ module.exports = {
         }
     },
 
+    changePassword : async (req, res) => {
+        try {
+            const userId = req.body.userId;
+            const currentPassword = req.body.currentPassword;
+            const newPassword = req.body.newPassword;
+            const DB = await getDbManager();
+            //fetch stored password hash
+            const result = await DB.query('brand_pulse', `
+                    SELECT password FROM authentication WHERE user_id = ${userId}
+                `)
+            const storedHash = result[0].password;  
+            //compare current password with stored hash
+            bcrypt.compare(currentPassword, storedHash, (err, isMatch) => {
+                if (err) throw err;
+                if (isMatch) {
+                    //hash new password
+                    bcrypt.hash(newPassword, 10, (err, hash) => {
+                        if (err) throw err; 
+                        //update password in database
+                        DB.query('brand_pulse', `
+                                UPDATE authentication
+                                    SET password = '${hash}'
+                                    WHERE user_id = ${userId}
+                            `)
+                        res.json({  
+                            success : true,
+                            message : 'password changed successfully'
+                        })
+                    });
+                } else {
+                    res.json({
+                        success : true,     
+                        message : 'current password is incorrect'
+                    })
+                }
+            });
+        } catch (error) {
+            console.log('Change Password Error: ', error)
+        }
+    },
     getIndustries : async (req, res) => {
         try {
             const DB = await getDbManager();

@@ -52,7 +52,7 @@ export const useDashboardStore = defineStore('useDashboardStore',{
             this.wordFrequency = this.calculateThemeFrequency(data);
             this.keywordFrequency = this.calculateKeywordFrequency(data);
             this.dateCount = this.calculateSentimentByDate(data);
-            
+            console.log('Date Count:', this.dateCount);
             // // Set up insights
             this.insights = this.setUpInsights(data);
             

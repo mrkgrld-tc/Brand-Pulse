@@ -104,7 +104,7 @@
                     </v-card-actions>
                 </v-card>
 
-                <v-card>
+                <!-- <v-card>
                     <v-card-title class="d-flex ga-2">
                         <v-icon>mdi-earth</v-icon>
                         <p>Public Analysis & Benchmarking</p>
@@ -174,7 +174,6 @@
                                 </v-list-item>
                             </v-list>
 
-                            <!-- Benchmarking Access -->
                             <v-divider class="my-4"></v-divider>
                             
                             <div class="pa-4 rounded" style="background: rgba(76, 175, 80, 0.1);">
@@ -189,7 +188,7 @@
                                             color="success"
                                             variant="outlined"
                                             prepend-icon="mdi-chart-bar"
-                                            to="/compare"
+                                            to="/benchmark"
                                         >
                                             View Industry Benchmarks
                                         </v-btn>
@@ -199,7 +198,7 @@
                         </div>
                     </v-card-text>
                 </v-card>
-                
+                 -->
                 <v-card style="border : 1px solid rgba(255, 0, 0, 0.2);">
                     <v-card-title class="d-flex ga-2">
                         <v-icon>mdi-alert</v-icon>
@@ -300,6 +299,7 @@
                                     prepend-inner-icon="mdi-lock"
                                     hide-details
                                     label="Current Password"
+                                    v-model="password.current"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -307,6 +307,7 @@
                                     prepend-inner-icon="mdi-lock-reset"
                                     hide-details
                                     label="New Password"
+                                    v-model="password.new"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -314,6 +315,7 @@
                                     prepend-inner-icon="mdi-lock-check"
                                     hide-details
                                     label="Confirm Password "
+                                    v-model="password.confirm"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -330,7 +332,7 @@
                         </v-row>
                     </v-card-text>
                     <v-card-actions class="d-flex justify-end">
-                        <v-btn prepend-icon="mdi-lock-reset" variant="tonal" color="primary">Change Password</v-btn>
+                        <v-btn @click="handleChangePassword" prepend-icon="mdi-lock-reset" variant="tonal" color="primary">Change Password</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -373,6 +375,11 @@ import api from '@/plugin/axios';
                 uploadAvatar : false,
                 imageData : null,
                 industryList : [],
+                password : {
+                    current : '',
+                    new : '',
+                    confirm : ''
+                }
             }
         },
         methods : {
@@ -416,6 +423,54 @@ import api from '@/plugin/axios';
                     industry : this.profileData['industry'],
                 }
                 this.updateProfile(updateData);
+            },
+            async handleChangePassword(){
+                // validate password
+                if (this.password.new !== this.password.confirm){
+                    this.showNotif({
+                        active : true,
+                        title : 'Password Mismatch',
+                        subtitle : 'New password and confirm password do not match',
+                        icon : 'mdi-alert-circle-outline',
+                    })
+                    return;
+                }
+
+                // send change password request
+                const res = await api.post('/changePassword', {
+                    userId : this.profileData['userId'],
+                    currentPassword : this.password.current,
+                    newPassword : this.password.new
+                });
+                    if (res.data.success){
+                        if(res.data.message === 'current password is incorrect'){
+                            this.showNotif({
+                                active : true,
+                                title : 'Incorrect Password',
+                                subtitle : 'The current password you entered is incorrect',
+                                icon : 'mdi-alert-circle-outline',
+                            })
+                            return;
+                        }
+                        this.showNotif({
+                            active : true,
+                            title : 'Password Changed',
+                            subtitle : 'Your password has been changed successfully',
+                            icon : 'mdi-check-circle-outline',
+                        })
+                        // clear password fields
+                        this.password.current = '';
+                        this.password.new = '';
+                        this.password.confirm = '';
+                    } else {
+                        this.showNotif({
+                            active : true,
+                            title : 'Error',
+                            subtitle : res.data.message || 'An error occurred while changing password',
+                            icon : 'mdi-alert-circle-outline',
+                        })
+                    }
+
             },
             async getIndustry(){
                 const res = await api.post('/getIndustries');
