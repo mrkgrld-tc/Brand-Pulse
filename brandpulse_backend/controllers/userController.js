@@ -68,82 +68,76 @@ module.exports = {
         }
     },
 
-    signup : async (req, res) => {
+    signup: async (req, res) => {
         try {
-            const name = req.body.data.name;
-            const email = req.body.data.email;
-            const password = req.body.data.password;
-            const contactNumber = req.body.data.contactNumber;
-            const address = req.body.data.address;
-            const companyName = req.body.data.companyName;
-            const industry = req.body.data.industry;
+            const { name, email, password, contactNumber, address, companyName, industry } = req.body.data;
             
             const DB = await getDbManager();
-            //check if email already exist
+            
+            // Check if email already exists (parameterized)
             const checkEmail = await DB.query('brand_pulse',
-                `
-                SELECT user_id FROM user WHERE email = '${email}'
-                `
-            )
-            if(checkEmail.length > 0){
-                res.json({
-                    success : true,
-                    message : 'account already exist'
-                })
-            }else{
-                //insert into user table
-                const result = await DB.query('brand_pulse',
-                    `
-                    INSERT INTO user
-                        (username, email,contact_number,address) 
-                    VALUES 
-                        ('${name}','${email}','${contactNumber}','${address}')
-                    `
-                )
-                //insert into company table
-                DB.query('brand_pulse',
-                    `
-                    INSERT INTO company
-                        (user_id, name, industry_id) 
-                    VALUES 
-                        ('${result.insertId}','${companyName}','${industry}')
-                    `
-                )
-                //encrypt password
-                bcrypt.hash(password, 10, (err, hash) => { 
-                    if (err) throw err; 
-                     //insert into authentication table
-                    DB.query('brand_pulse',
-                        `
-                        INSERT INTO authentication
-                            (user_id, password) 
-                        VALUES 
-                            ('${result.insertId}', '${hash}')
-                        `
-                    )
+                'SELECT user_id FROM user WHERE email = ?',
+                [email]
+            );
+            
+            if (checkEmail.length > 0) {
+                return res.json({
+                    success: false,
+                    message: 'Account already exists'
                 });
-               //Insert into plan table
-               const insertPlan = await DB.query(`brand_pulse`, `
-                    INSERT INTO plan(end_date)
-                    VALUES (DATE_ADD(CURDATE(), INTERVAL 30 DAY))
-                `)
-                //isnert into user_preferense table
-                DB.query('brand_pulse',
-                    `
-                        INSERT INTO account_preference(user_id, plan_id) VALUES (${result.insertId}, ${insertPlan.insertId})
-                    `
-                )
-                res.json({
-                    success : true,
-                    message : 'created account'
-                })
             }
             
-        } catch (error) {
+            // Hash password FIRST (before database operations)
+            const hashedPassword = await bcrypt.hash(password, 10);
+            
+            // Insert into user table (parameterized)
+            const userResult = await DB.query('brand_pulse',
+                `INSERT INTO user (username, email, contact_number, address) 
+                VALUES (?, ?, ?, ?)`,
+                [name, email, contactNumber, address]
+            );
+            
+            const userId = userResult.insertId;
+            
+            // Insert into company table (parameterized)
+            await DB.query('brand_pulse',
+                `INSERT INTO company (user_id, name, industry_id) 
+                VALUES (?, ?, ?)`,
+                [userId, companyName, industry]
+            );
+            
+            // Insert into authentication table (parameterized)
+            await DB.query('brand_pulse',
+                `INSERT INTO authentication (user_id, password) 
+                VALUES (?, ?)`,
+                [userId, hashedPassword]
+            );
+            
+            // Insert into plan table
+            const planResult = await DB.query('brand_pulse',
+                `INSERT INTO plan (end_date) 
+                VALUES (DATE_ADD(CURDATE(), INTERVAL 30 DAY))`
+            );
+            
+            // Insert into account_preference table (parameterized)
+            await DB.query('brand_pulse',
+                `INSERT INTO account_preference (user_id, plan_id) 
+                VALUES (?, ?)`,
+                [userId, planResult.insertId]
+            );
+            
             res.json({
-                success : false,
-                error : error
-            })
+                success: true,
+                message: 'Account created successfully'
+            });
+            
+        } catch (error) {
+            console.error('Signup error:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to create account',
+                error: error.message
+            });
         }
     },
 

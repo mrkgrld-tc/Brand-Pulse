@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import api from '@/plugin/axios';
 import { useNotifStore } from '../utilities/notifStore';
+import { useDashboardStore } from './dashboardStore';
+import { useBenchStore } from './benchmarkStore';
 
 export const useAnalysisStore = defineStore('useAnalysisStore', {
     state : () => ({
@@ -32,6 +34,10 @@ export const useAnalysisStore = defineStore('useAnalysisStore', {
                         icon : 'mdi-check-circle-outline',
                         autoClose : true,
                     })
+                    const dashboardStore = useDashboardStore();
+                    dashboardStore.fetchedDashboard = false;
+                    const benchStore = useBenchStore();
+                    benchStore.fetchedBench = false;
                     return {
                         success : true,
                         results : res.data.results,

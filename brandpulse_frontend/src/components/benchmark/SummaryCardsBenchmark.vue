@@ -4,7 +4,7 @@
             <v-card-text class="d-flex justify-space-around">
                 <div class="d-flex ga-2 align-center flex-column">
                     <v-card-subtitle>Your Industry</v-card-subtitle>
-                    <v-chip density="compact" color="primary">Technology</v-chip>
+                    <v-chip density="compact" color="primary">{{yourIndustry}}</v-chip>
                 </div>
                 <v-divider vertical class="border-opacity-25"></v-divider>  
                 <div class="d-flex ga-2 align-center flex-column">
@@ -96,6 +96,10 @@
                 type : Number,
                 default : 0
             },
+            yourIndustry : { 
+                type : String,
+                default : 'N/A'
+            }
         }
     }
 </script>

@@ -8,6 +8,7 @@
                 :topPerformer="topCompetitor?.average" 
                 :totalCompetitors="totalCompetitors" 
                 :yourRanking="yourRanking"
+                :yourIndustry="companyData.industry"
             />
             
             <SentimentDistributionBenchMark
