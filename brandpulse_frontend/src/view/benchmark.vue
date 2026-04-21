@@ -22,8 +22,11 @@
                 :industryTopThemes="industry?.themes"
                 :topPerformerTopThemes="topCompetitor?.themes"
             />
-            
-            <AllCompetitorList :competitorList="allCompetitors"/>
+            <AllCompetitorList 
+            :competitorList="Array.isArray(allCompetitors) 
+                ? allCompetitors.filter(c => c.companyId !== companyData.companyId) 
+                : []"
+            />
         </v-row>
     </v-container>
 </template>
