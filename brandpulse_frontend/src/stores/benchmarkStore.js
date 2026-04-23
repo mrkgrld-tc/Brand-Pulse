@@ -18,9 +18,9 @@ export const useBenchStore = defineStore('useBenchStore', {
         totalCompetitors : null,
     }),
     actions : {
-         async getCompetitorsData (companyId, industryId){
+         async getCompetitorsData (companyId, category){
             try {
-                const raw = await api.post('/getCompetitorsData', {companyId, industryId});
+                const raw = await api.post('/getCompetitorsData', {companyId, category});
                 this.competitorsRawData = raw.data.res;
                 
                 this.processData(this.competitorsRawData);

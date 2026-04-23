@@ -739,10 +739,12 @@ module.exports = {
                 SELECT * FROM analysis AS ana 
                     INNER JOIN company AS comp 
                         ON ana.company_id = comp.company_id
+                    INNER JOIN industries AS ind
+                        ON ind.industry_id = comp.industry_id
                 WHERE comp.company_id != ?
-                AND comp.industry_id = ?
+                AND ind.category = ?
             `;
-            const analysisData = [req.body.companyId, req.body.industryId];
+            const analysisData = [req.body.companyId, req.body.category];
             const analysisRaw = await DB.query('brand_pulse', analysisQuery, analysisData);
             const analysis = analysisRaw.map(item => {
                 return{

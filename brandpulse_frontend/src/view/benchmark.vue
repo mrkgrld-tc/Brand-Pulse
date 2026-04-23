@@ -22,6 +22,7 @@
                 :industryTopThemes="industry?.themes"
                 :topPerformerTopThemes="topCompetitor?.themes"
             />
+            
             <AllCompetitorList 
             :competitorList="Array.isArray(allCompetitors) 
                 ? allCompetitors.filter(c => c.companyId !== companyData.companyId) 
@@ -70,7 +71,7 @@ import { useAnalysisStore } from '@/stores/analysisStore';
                 this.setRawData(result);
             }
             await this.processData()
-            await this.getCompetitorsData(this.companyData['companyId'], this.companyData['industryId']);
+            await this.getCompetitorsData(this.companyData['companyId'], this.companyData['category']);
         }
     }
 </script>
